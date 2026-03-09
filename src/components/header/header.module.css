@@ -1,0 +1,20 @@
+.mainContainer {
+  width: 100%;
+  min-height: 54px;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  display: flex;
+  align-items: center;
+  background-color: lightgray;
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+}
+
+.logOutButton {
+  align-self: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.children {
+  align-self: center;
+}
