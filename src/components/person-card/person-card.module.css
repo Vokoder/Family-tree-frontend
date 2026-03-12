@@ -1,0 +1,28 @@
+.card {
+  margin-bottom: 0.7vh;
+  overflow-x: 'hidden';
+}
+
+.card_male {
+  border-left: 4px solid #1677ff
+}
+
+.card_female {
+  border-left: 4px solid #eb2f96
+}
+
+.full_name {
+  margin: 0;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  white-space: 'nowrap';
+  overflow: 'hidden';
+  width: 100%;
+  word-break: 'break-word';
+  text-overflow: 'ellipsis';
+}
+
+.descriptions_style {
+  table-layout: 'fixed';
+  width: '100%';
+}
