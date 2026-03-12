@@ -12,7 +12,7 @@ import { AUTH_ERROR } from './sign-in.constants';
 import { INVALID_CREDENTIAL } from '../../constants/validation';
 import { showAlert, hideAlert } from '../../store/';
 import { HttpError } from '../../modules/http-error';
-import { SERVER_LOGIN_ADRESS } from '../../constants/env';
+import { SERVER_AUTH_ADRESS, SERVER_LOGIN_ADRESS } from '../../constants/env';
 import { useAppDispatch } from '../../store/hooks';
 import { logIn } from '../../store/user-slice';
 import { sendAuthRequest } from '../../modules/fetch-api';
@@ -29,7 +29,7 @@ export const SignInForm = () => {
 
   const onSubmit: SubmitHandler<SignIn> = async (data) => {
     try {
-      const user = await sendAuthRequest(data.login, data.password, SERVER_LOGIN_ADRESS);
+      const user = await sendAuthRequest(data.login, data.password, `${SERVER_AUTH_ADRESS}${SERVER_LOGIN_ADRESS}`);
       setIsInvalidCredentials(false);
       dispatch(hideAlert());
       dispatch(logIn(user));

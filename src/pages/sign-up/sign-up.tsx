@@ -9,7 +9,7 @@ import { SubmitButton } from '../../components/form';
 import { AuthLayout } from '../../layouts/auth-layout';
 import { InputField } from '../../components/form';
 import { showAlert, hideAlert } from '../../store';
-import { SERVER_REGISTER_ADRESS } from '../../constants/env';
+import { SERVER_AUTH_ADRESS, SERVER_REGISTER_ADRESS } from '../../constants/env';
 import { HttpError } from '../../modules/http-error';
 import { useAppDispatch } from '../../store/hooks';
 import { logIn } from '../../store/user-slice';
@@ -26,7 +26,7 @@ export const SignUpForm = () => {
 
   const onSubmit: SubmitHandler<SignUp> = async (data) => {
     try {
-      const user = await sendAuthRequest(data.login, data.password, SERVER_REGISTER_ADRESS);
+      const user = await sendAuthRequest(data.login, data.password, `${SERVER_AUTH_ADRESS}${SERVER_REGISTER_ADRESS}`);
       dispatch(hideAlert());
       dispatch(logIn(user));
     } catch (error) {

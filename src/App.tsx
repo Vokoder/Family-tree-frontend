@@ -1,33 +1,31 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { SignInForm } from './pages/sign-in';
 import { SignUpForm } from './pages/sign-up';
 import { GuestProtected } from './routes/guest-protected-router';
-import { SIGN_IN_PATH, SIGN_UP_PATH } from './constants/routes.constant';
+import { PERSONS_PATH, PROFILE_PATH, SIGN_IN_PATH, SIGN_UP_PATH } from './constants/routes.constant';
 import { AuthProtected } from './routes/auth-protected-router';
 import { Profile } from './pages/profile/profile';
-import { BASENAME } from './constants/env';
 import NotFound from './pages/not-found/not-found';
-import { Provider } from 'react-redux';
-import { store } from './store/store.ts';
+import { Persons } from './pages/persons/persons.tsx';
 
 function App() {
   return (
-    <BrowserRouter basename={BASENAME}>
-      <Provider store={store}>
-        <Routes>
-          <Route element={<AuthProtected />}>
-            <Route index element={<Profile />} />
-          </Route>
+    <Routes>
+      <Route element={<AuthProtected />}>
+        <Route path={PROFILE_PATH} element={<Profile />} />
+      </Route>
 
-          <Route element={<GuestProtected />}>
-            <Route index path={SIGN_IN_PATH} element={<SignInForm />} />
-            <Route path={SIGN_UP_PATH} element={<SignUpForm />} />
-          </Route>
+      <Route element={<GuestProtected />}>
+        {/* <Route index path={SIGN_IN_PATH} element={<SignInForm />} /> */}
+        <Route path={SIGN_IN_PATH} element={<SignInForm />} />
+        <Route path={SIGN_UP_PATH} element={<SignUpForm />} />
+      </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Provider>
-    </BrowserRouter>
+      {/* <Route path={`${TREE_PATH}/*`} element={ } /> */}
+      <Route path={PERSONS_PATH} element={<Persons />} />
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 

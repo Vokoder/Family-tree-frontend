@@ -1,0 +1,23 @@
+import type { relationFilterSchema } from '../schemas/relation.schema.ts';
+import type z from 'zod';
+
+export interface Relation {
+  id: string;
+  sourcePersonId: string;
+  targetPersonId: string;
+  relationId: string;
+  ownerId: string;
+}
+
+export type FirebaseRelation = Omit<Relation, 'id'>;
+
+export type RelationFilters = z.infer<typeof relationFilterSchema>;
+export type FirebaseRelationFilter = Partial<FirebaseRelation>;
+
+export type RelationDto = Partial<Relation>;
+
+//  минимально необходимые поля для связи
+export const relationRequiredFields: (keyof Relation)[] = ['ownerId', 'relationId', 'sourcePersonId', 'targetPersonId'];
+
+//  поля поиска
+export const relationSearchFields: (keyof Relation)[] = ['id', 'relationId', 'sourcePersonId', 'targetPersonId'];
