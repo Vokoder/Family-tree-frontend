@@ -1,41 +1,43 @@
-import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
+import { useEffect, useState } from 'react';
 import { Layout, Form, Input, Select, DatePicker, Button, Space, Typography, Row, Col } from 'antd';
 import { SearchOutlined, FilterOutlined } from '@ant-design/icons';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { personFilterSchema } from '../../schemas/person.schema';
 import { PersonCard } from '../../components/person-card/person-card';
-import { GoToProfileButton } from '../../components/go-to-profile-button/go-to-profile-button';
+import { GoToProfileButton } from '../../components/go-to-profile-button';
 import { getPersons } from '../../modules/fetch-api';
 import { CITY, COUNTRY, DATE_OF_BIRTHDAY, DATE_OF_DEATH, FEMALE, FILTERS, FIRST_NAME, GENDER, KEYWORDS, LAST_NAME, MALE, MIDDLE_NAME, NOTHING_FOUND, PLACE_OF_BIRTHDAY, PLACE_OF_DEATH, RESET, SEARCH, SEARCH_CITY, SEARCH_COUNTRY, SEARCH_FIRST_NAME, SEARCH_LAST_NAME, SEARCH_MIDDLE_NAME, SEARCH_PLACE_OF_BIRTHDAY, SEARCH_PLACE_OF_DEATH, SELECT_GENDER, SELECT_KEYWORDS, WEBSITE_TITLE } from '../../constants/constants';
 import type { Person, PersonFilters } from '../../types/person.type';
 import styles from './persons.module.css'
+import { removeEmptyOrUndefined } from '../../utils/remove-undefined.utils';
 
 const { Sider, Content, Header } = Layout;
 const { Title } = Typography;
 
-const getSearchedPersons = async (setPersons: Dispatch<SetStateAction<Person[]>>, filter?: PersonFilters): Promise<void> => {
-  try {
-    const persons = await getPersons(filter);
-    setPersons(persons)
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export const Persons = () => {
   const [searchResults, setSearchResults] = useState<Person[]>([]);
+
+  const getSearchedPersons = async (filter?: PersonFilters): Promise<void> => {
+    try {
+      const persons = await getPersons(filter);
+      setSearchResults(persons)
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(personFilterSchema),
   });
 
   useEffect(() => {
-    getSearchedPersons(setSearchResults);
+    getSearchedPersons();
   }, [])
 
   const onSearch = (filter: PersonFilters) => {
-    getSearchedPersons(setSearchResults, filter)
+    const clearedFilter = removeEmptyOrUndefined(filter);
+    getSearchedPersons(clearedFilter);
   };
 
   return (
@@ -125,7 +127,7 @@ export const Persons = () => {
             </Form.Item>
 
             <Form.Item label={CITY}>
-              <Controller name="country" control={control} render={({ field }) => <Input {...field} placeholder={SEARCH_CITY} />} />
+              <Controller name="city" control={control} render={({ field }) => <Input {...field} placeholder={SEARCH_CITY} />} />
             </Form.Item>
 
             <Form.Item label={KEYWORDS}>
@@ -137,7 +139,11 @@ export const Persons = () => {
             </Form.Item>
 
             <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-              <Button onClick={() => reset()}>{RESET}</Button>
+              <Button onClick={() => {
+                getSearchedPersons();
+                reset()
+              }
+              }>{RESET}</Button>
               <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>{SEARCH}</Button>
             </Space>
           </Form>

@@ -24,6 +24,9 @@ export const COUNTRY = 'Страна';
 export const CITY = 'Город';
 export const KEYWORDS = 'Ключевые слова (через запятую)';
 
+//  go to profile button
+export const LOG_IN = 'Войти';
+
 //  person search placeholders
 export const SEARCH_LAST_NAME = 'Введите фамилию';
 export const SEARCH_FIRST_NAME = 'Введите имя';

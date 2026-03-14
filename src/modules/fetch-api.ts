@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { User } from '../types/user.type'
 import { HttpError } from './http-error';
-import { SERVER_ADRESS, SERVER_LOGOUT_ADRESS, SERVER_PERSON_ADRESS } from '../constants/env';
+import { SERVER_ADRESS, SERVER_LOGOUT_ADRESS, SERVER_PERSON_ADRESS, SERVER_USER_ADRESS } from '../constants/env';
 import { AXIOS_ERROR } from '../constants/errors.constant';
 import type { Person, PersonFilters } from '../types/person.type';
 
@@ -54,4 +54,15 @@ export const getPersons = async (filter?: PersonFilters): Promise<Person[]> => {
 
   const persons = await axiosGetRequest<Person[]>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}`, normalizedFilter);
   return persons;
+}
+
+export const getMyUser = async (): Promise<User | null> => {
+  let user: User | null = null;
+  try {
+    user = await axiosGetRequest<User>(`${SERVER_ADRESS}${SERVER_USER_ADRESS}`);
+  } catch (error) {
+    console.error(error);
+  }
+
+  return user;
 }

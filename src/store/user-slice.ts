@@ -1,12 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { User } from '../types/user.type';
-import { checkAuthRequest } from '../modules/fetch-api';
+import { getMyUser } from '../modules/fetch-api';
 
 type UserState = {
   user: User | null;
 };
 
-const initialState: UserState = { user: await checkAuthRequest() };
+const initialState: UserState = {user: await getMyUser()}
 
 const userSlice = createSlice({
   name: 'user',
