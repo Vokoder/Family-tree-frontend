@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import { PASSWORDS_NOT_SAME, REQUIRED, WEAK_PASSWORD } from '../../constants/validation';
 
 export const signUpSchema = yup

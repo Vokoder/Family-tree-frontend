@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.10.0",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/css-modules": "^1.0.5",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^19.2.14",

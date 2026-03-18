@@ -1,12 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
-import { SignInForm } from './pages/sign-in';
-import { SignUpForm } from './pages/sign-up';
-import { GuestProtected } from './routes/guest-protected-router';
+
 import { PERSONS_PATH, PROFILE_PATH, SIGN_IN_PATH, SIGN_UP_PATH } from './constants/routes.constant';
-import { AuthProtected } from './routes/auth-protected-router';
-import { Profile } from './pages/profile/profile';
 import NotFound from './pages/not-found/not-found';
 import { Persons } from './pages/persons/persons.tsx';
+import { Profile } from './pages/profile/profile';
+import { SignInForm } from './pages/sign-in';
+import { SignUpForm } from './pages/sign-up';
+import { AuthProtected } from './routes/auth-protected-router';
+import { GuestProtected } from './routes/guest-protected-router';
 
 function App() {
   return (
@@ -16,7 +17,6 @@ function App() {
       </Route>
 
       <Route element={<GuestProtected />}>
-        {/* <Route index path={SIGN_IN_PATH} element={<SignInForm />} /> */}
         <Route path={SIGN_IN_PATH} element={<SignInForm />} />
         <Route path={SIGN_UP_PATH} element={<SignUpForm />} />
       </Route>
@@ -24,7 +24,7 @@ function App() {
       {/* <Route path={`${TREE_PATH}/*`} element={ } /> */}
       <Route path={PERSONS_PATH} element={<Persons />} />
 
-      <Route path="*" element={<NotFound />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   );
 }

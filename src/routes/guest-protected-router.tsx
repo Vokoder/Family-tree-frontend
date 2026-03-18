@@ -1,7 +1,8 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../store/hooks';
 import { useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
 import { PERSONS_PATH } from '../constants/routes.constant';
+import { useAppSelector } from '../store/hooks';
 
 export const GuestProtected = () => {
   const user = useAppSelector((state) => state.user.user);

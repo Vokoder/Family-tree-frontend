@@ -1,6 +1,7 @@
+import { useCallback } from 'react';
+
 import { useAppDispatch } from '../store/hooks';
 import { logOut as logOutAction } from '../store/user-slice';
-import { useCallback } from 'react';
 import { logOutRequest } from './fetch-api';
 
 export const useLogOut = () => {

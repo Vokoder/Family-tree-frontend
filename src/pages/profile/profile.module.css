@@ -5,3 +5,17 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+.screen_page {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.person_link {
+  font-weight: 'bold'
+}
+
+.space {
+  margin-top: '24px'
+}

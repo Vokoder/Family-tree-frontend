@@ -1,14 +1,24 @@
-import { Card, Descriptions, Tag, Typography } from "antd";
-import type { Person } from "../../types/person.type";
-import { ManOutlined, WomanOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
-import { DATE_OF_BIRTHDAY, DATE_OF_DEATH, GENDER, PLACE_OF_BIRTHDAY, PLACE_OF_DEATH, RELATED_LOCATIONS } from "../../constants/constants";
-import { useNavigate } from "react-router-dom";
-import styles from './person-card.module.css'
+import { useNavigate } from 'react-router-dom';
+
+import { Card, Descriptions, Tag, Typography } from 'antd';
+
+import { ManOutlined, WomanOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+
+import {
+  DATE_OF_BIRTHDAY,
+  DATE_OF_DEATH,
+  GENDER,
+  PLACE_OF_BIRTHDAY,
+  PLACE_OF_DEATH,
+  RELATED_LOCATIONS,
+} from '../../constants/constants';
+import type { Person } from '../../types/person.type';
+import styles from './person-card.module.css';
 
 type PersonCardProps = {
-  person: Person
-}
+  person: Person;
+};
 
 export const PersonCard = ({ person }: PersonCardProps) => {
   const navigate = useNavigate();
@@ -16,7 +26,9 @@ export const PersonCard = ({ person }: PersonCardProps) => {
 
   return (
     <Card
-      onClick={() => { navigate(person.id) }}
+      onClick={() => {
+        navigate(person.id);
+      }}
       hoverable
       className={[styles.card, person.gender ? styles.card_male : styles.card_female].join(' ')}
       style={{ borderLeft: `4px solid ${person.gender ? '#1677ff' : '#eb2f96'} ` }}
@@ -38,7 +50,7 @@ export const PersonCard = ({ person }: PersonCardProps) => {
           padding: '4px 8px',
           overflowWrap: 'break-word',
           wordBreak: 'break-word',
-          whiteSpace: 'normal'
+          whiteSpace: 'normal',
         }}
         contentStyle={{
           backgroundColor: '#fff',
@@ -46,14 +58,12 @@ export const PersonCard = ({ person }: PersonCardProps) => {
           padding: '4px 8px',
           overflowWrap: 'break-word',
           wordBreak: 'break-word',
-          verticalAlign: 'top'
+          verticalAlign: 'top',
         }}
       >
         {/* Рождение */}
         {person.dateOfBirthday && (
-          <Descriptions.Item label={DATE_OF_BIRTHDAY}>
-            {formatDate(person.dateOfBirthday)}
-          </Descriptions.Item>
+          <Descriptions.Item label={DATE_OF_BIRTHDAY}>{formatDate(person.dateOfBirthday)}</Descriptions.Item>
         )}
         {person.placeOfBirthday && (
           <Descriptions.Item label={PLACE_OF_BIRTHDAY} style={{ padding: 0, margin: 0 }}>
@@ -63,15 +73,11 @@ export const PersonCard = ({ person }: PersonCardProps) => {
 
         {/* Смерть */}
         {person.dateOfDeath && (
-          <Descriptions.Item label={<Typography.Text type="danger">{DATE_OF_DEATH}</Typography.Text>}>
+          <Descriptions.Item label={<Typography.Text type='danger'>{DATE_OF_DEATH}</Typography.Text>}>
             {formatDate(person.dateOfDeath)}
           </Descriptions.Item>
         )}
-        {person.placeOfDeath && (
-          <Descriptions.Item label={PLACE_OF_DEATH}>
-            {person.placeOfDeath}
-          </Descriptions.Item>
-        )}
+        {person.placeOfDeath && <Descriptions.Item label={PLACE_OF_DEATH}>{person.placeOfDeath}</Descriptions.Item>}
 
         {/* Локация */}
         {(person.country || person.city) && (
@@ -86,6 +92,6 @@ export const PersonCard = ({ person }: PersonCardProps) => {
           </Tag>
         </Descriptions.Item>
       </Descriptions>
-    </Card >
-  )
-}
+    </Card>
+  );
+};

@@ -1,6 +1,8 @@
-import { Col } from 'antd';
-import { InputField } from './form';
 import type { Control, FieldValues, Path } from 'react-hook-form';
+
+import { Col } from 'antd';
+
+import { InputField } from './form';
 
 type LoginPasswordFieldsProps<T extends FieldValues> = {
   control: Control<T>;
@@ -13,8 +15,8 @@ export const LoginPasswordFields = <T extends FieldValues>({ control }: LoginPas
         <InputField<T>
           control={control}
           controllerName={'login' as Path<T>}
-          label="Логин"
-          placeholder="Введите имя пользователя"
+          label='Логин'
+          placeholder='Введите имя пользователя'
           required={true}
         />
       </Col>
@@ -24,8 +26,8 @@ export const LoginPasswordFields = <T extends FieldValues>({ control }: LoginPas
           control={control}
           controllerName={'password' as Path<T>}
           asPassword={true}
-          label="Пароль"
-          placeholder="Введите пароль"
+          label='Пароль'
+          placeholder='Введите пароль'
           required={true}
         />
       </Col>

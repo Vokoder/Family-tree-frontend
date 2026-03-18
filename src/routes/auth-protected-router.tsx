@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { SIGN_IN_PATH } from '../constants/routes.constant';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import { SIGN_IN_PATH } from '../constants/routes.constant';
 import { useAppSelector } from '../store/hooks';
 
 export const AuthProtected = () => {

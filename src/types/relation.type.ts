@@ -1,5 +1,6 @@
-import type { relationFilterSchema } from '../schemas/relation.schema.ts';
 import type z from 'zod';
+
+import type { relationFilterSchema } from '../schemas/relation.schema.ts';
 
 export interface Relation {
   id: string;

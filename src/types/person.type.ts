@@ -1,5 +1,6 @@
-import type { personFilterSchema } from '../schemas/person.schema.ts';
 import type z from 'zod';
+
+import type { personFilterSchema } from '../schemas/person.schema.ts';
 
 export interface Person {
   id: string;
@@ -18,6 +19,23 @@ export interface Person {
   keywords?: string[];
   contactInformation?: string;
 }
+
+export type CreatePersonFields = {
+  lastName: string;
+  firstName: string;
+  middleName?: string;
+  gender: boolean; // 1 - male, 0 - female
+  dateOfBirthday?: Date;
+  placeOfBirthday?: string;
+  dateOfDeath?: Date;
+  placeOfDeath?: string;
+  country?: string;
+  city?: string;
+  biography?: string;
+  keywords?: string[];
+  contactInformation?: string;
+  relation?: string;
+};
 
 export type PersonFilters = z.infer<typeof personFilterSchema>;
 

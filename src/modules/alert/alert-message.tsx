@@ -1,7 +1,8 @@
-import styles from './alert.module.css';
 import { Alert } from 'antd';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+
 import { hideAlert } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import styles from './alert.module.css';
 
 export const AlertMessage = () => {
   const alert = useAppSelector((state) => state.alert.alert);

@@ -1,20 +1,23 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
+
 import { Row, Col } from 'antd';
-import { SignUpHeader } from './sign-up-header/sign-up-header';
-import type { SignUp } from './sign-up.types';
+
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signUpSchema } from './sign-up-validation-schema';
-import { AUTH_ERROR } from './sign-up.constants';
+
 import { SubmitButton } from '../../components/form';
-import { AuthLayout } from '../../layouts/auth-layout';
 import { InputField } from '../../components/form';
-import { showAlert, hideAlert } from '../../store';
+import { LoginPasswordFields } from '../../components/login-password-fields';
 import { SERVER_AUTH_ADRESS, SERVER_REGISTER_ADRESS } from '../../constants/env';
+import { AuthLayout } from '../../layouts/auth-layout';
+import { sendAuthRequest } from '../../modules/fetch-api';
 import { HttpError } from '../../modules/http-error';
+import { showAlert, hideAlert } from '../../store';
 import { useAppDispatch } from '../../store/hooks';
 import { logIn } from '../../store/user-slice';
-import { sendAuthRequest } from '../../modules/fetch-api';
-import { LoginPasswordFields } from '../../components/login-password-fields';
+import { SignUpHeader } from './sign-up-header/sign-up-header';
+import { signUpSchema } from './sign-up-validation-schema';
+import { AUTH_ERROR } from './sign-up.constants';
+import type { SignUp } from './sign-up.types';
 
 export const SignUpForm = () => {
   const dispatch = useAppDispatch();
@@ -48,10 +51,10 @@ export const SignUpForm = () => {
               <Col span={24}>
                 <InputField<SignUp>
                   control={control}
-                  controllerName="confirmPassword"
+                  controllerName='confirmPassword'
                   asPassword={true}
-                  label="Подтвердите пароль"
-                  placeholder="Введите пароль"
+                  label='Подтвердите пароль'
+                  placeholder='Введите пароль'
                   required={true}
                 />
               </Col>

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import {
   Controller,
   type Control,
@@ -6,10 +7,11 @@ import {
   type FieldValues,
   type Path,
 } from 'react-hook-form';
-import { FormInputName } from './form-input-name/form-input-name';
-import { ErrorMessage } from './form-error-message';
+
 import { Col, Row, Typography } from 'antd';
-import type { ReactNode } from 'react';
+
+import { ErrorMessage } from './form-error-message';
+import { FormInputName } from './form-input-name/form-input-name';
 
 export interface FormFieldProps<T extends FieldValues> {
   control: Control<T>;
@@ -30,24 +32,24 @@ export const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
       control={props.control}
       render={({ field, fieldState }) => (
         <>
-          <Row justify="space-between" align="middle">
+          <Row justify='space-between' align='middle'>
             {props.label !== undefined && (
-              <Col flex="auto">
+              <Col flex='auto'>
                 <FormInputName name={props.label} required={props.required} />
               </Col>
             )}
             {props.counter !== undefined && props.maxLength !== undefined && (
               <Col>
-                <Text type="secondary">
+                <Text type='secondary'>
                   {props.counter}/{props.maxLength}
                 </Text>
               </Col>
             )}
           </Row>
 
-          <Row justify="start">{props.children({ field, fieldState })}</Row>
+          <Row justify='start'>{props.children({ field, fieldState })}</Row>
 
-          <Row justify="start">
+          <Row justify='start'>
             <ErrorMessage message={fieldState.error?.message} />
           </Row>
         </>
