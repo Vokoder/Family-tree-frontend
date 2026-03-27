@@ -10,7 +10,8 @@ export const CANCEL = 'Отменить';
 export const EFFECT_IRREVERSIBLE = 'Это действие необратимо';
 
 //  auth
-export const LOG_OUT = 'Выйти';
+export const LOG_OUT = 'Выйти из аккуанта';
+export const LOG_OUT_ALL = 'Выйти из всех аккаунтов';
 
 // gender
 export const MALE = 'Мужской';

@@ -4,7 +4,9 @@ import qs from 'qs';
 import {
   LICENSE_ADRESS,
   SERVER_ADRESS,
+  SERVER_AUTH_ADRESS,
   SERVER_LOGOUT_ADRESS,
+  SERVER_LOGOUT_ALL_ADRESS,
   SERVER_PERSON_ADRESS,
   SERVER_PROFILE_ADRESS,
   SERVER_RELATION_ADRESS,
@@ -77,8 +79,16 @@ export const sendAuthRequest = async (login: string, password: string, path: str
   return user;
 };
 
-export const logOutRequest = async (): Promise<void> => {
-  await axiosPostRequest(SERVER_LOGOUT_ADRESS);
+export const logOutRequest = async (all: boolean): Promise<number> => {
+  try {
+    await axiosPostRequest(
+      `${SERVER_ADRESS}${SERVER_AUTH_ADRESS}${all ? SERVER_LOGOUT_ALL_ADRESS : SERVER_LOGOUT_ADRESS}`,
+    );
+    return 200;
+  } catch (error) {
+    console.error(error);
+    return 500;
+  }
 };
 
 export const deleteProfileRequest = async (uid?: string): Promise<number> => {

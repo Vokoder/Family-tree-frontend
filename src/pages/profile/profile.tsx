@@ -19,6 +19,8 @@ import {
   ERROR_DELETING_PROFILE,
   ERROR_GETTING_MY_PERSONS,
   GO_TO_MY_PERSON,
+  LOG_OUT,
+  LOG_OUT_ALL,
   LOGIN,
   MY_PERSON,
   NO_PERSONS,
@@ -26,8 +28,8 @@ import {
   SUBMIT,
 } from '../../constants/constants';
 import { AlertMessage } from '../../modules/alert';
-import { deleteProfileRequest, getCreatedPersonsRequest } from '../../modules/fetch-api';
-import { hideAlert, logOut, showAlert, useAppDispatch, useAppSelector } from '../../store';
+import { deleteProfileRequest, getCreatedPersonsRequest, logOutRequest } from '../../modules/fetch-api';
+import { hideAlert, logOut as logOutAction, showAlert, useAppDispatch, useAppSelector } from '../../store';
 import type { Person } from '../../types/person.type';
 import styles from './profile.module.css';
 
@@ -49,7 +51,16 @@ export const Profile = () => {
     setCreatedPersons(persons);
   };
 
-  const changePassword = (status: number) => {
+  const logOut = async (all: boolean) => {
+    const status = await logOutRequest(all);
+    if (status !== 200) {
+      return;
+    }
+
+    dispatch(logOutAction());
+  };
+
+  const handleChangePassword = (status: number) => {
     if (status !== 200) {
       dispatch(showAlert({ type: 'warning', message: ERROR_CHANGING_PASSWORD }));
       return;
@@ -59,7 +70,7 @@ export const Profile = () => {
     setIsPassModalOpen(false);
   };
 
-  const createdPerson = async (status: number) => {
+  const handleCreatePerson = async (status: number) => {
     if (status !== 200) {
       dispatch(showAlert({ type: 'warning', message: ERROR_CREATING_PERSON }));
       return;
@@ -71,15 +82,23 @@ export const Profile = () => {
     setIsPersonModalOpen(false);
   };
 
-  const deleteProfile = async () => {
+  const handleDeleteProfile = async () => {
     const status = await deleteProfileRequest();
     if (status !== 200) {
       dispatch(showAlert({ type: 'warning', message: ERROR_DELETING_PROFILE }));
       return;
     }
 
-    dispatch(logOut());
+    dispatch(logOutAction());
     dispatch(hideAlert());
+  };
+
+  const handleLogOut = () => {
+    logOut(false);
+  };
+
+  const handleLogOutAll = () => {
+    logOut(true);
   };
 
   useEffect(() => {
@@ -128,12 +147,17 @@ export const Profile = () => {
             <Popconfirm
               title={`${DELETE_ACCOUNT}?`}
               description={EFFECT_IRREVERSIBLE}
-              onConfirm={deleteProfile}
+              onConfirm={handleDeleteProfile}
               okText={SUBMIT}
               cancelText={CANCEL}
             >
               <Button danger>{DELETE_ACCOUNT}</Button>
             </Popconfirm>
+          </Space>
+
+          <Space className={styles.space}>
+            <Button onClick={handleLogOut}>{LOG_OUT}</Button>
+            <Button onClick={handleLogOutAll}>{LOG_OUT_ALL}</Button>
           </Space>
         </Card>
 
@@ -141,12 +165,12 @@ export const Profile = () => {
           open={isPersonModalOpen}
           isForSelf={true}
           onCancel={() => setIsPersonModalOpen(false)}
-          onSubmit={createdPerson}
+          onSubmit={handleCreatePerson}
         />
         <ChangePasswordModal
           open={isPassModalOpen}
           onCancel={() => setIsPassModalOpen(false)}
-          onSubmit={changePassword}
+          onSubmit={handleChangePassword}
         />
       </div>
 
