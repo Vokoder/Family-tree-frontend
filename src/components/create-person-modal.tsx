@@ -32,7 +32,7 @@ import {
   SUBMIT,
 } from '../constants/constants';
 import { createPersonRequest, createRelationRequest } from '../modules/fetch-api';
-import { createPersonSchema } from '../schemas/create-peson-validation-schema';
+import { createPersonSchema } from '../schemas/create-pesron-validation-schema';
 import { useAppSelector } from '../store';
 import type { CreatePersonFields } from '../types/person.type';
 import type { RelationDto } from '../types/relation.type';
@@ -100,7 +100,7 @@ export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: Creat
       open={open}
       onOk={handleSubmit(submitHandler)}
       onCancel={() => {
-        handleClose;
+        handleClose();
       }}
       width={'60vw'}
       okText={SUBMIT}

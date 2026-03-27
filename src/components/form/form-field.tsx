@@ -25,29 +25,37 @@ export interface FormFieldProps<T extends FieldValues> {
 
 const { Text } = Typography;
 
-export const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
+export const FormField = <T extends FieldValues>({
+  control,
+  controllerName,
+  label,
+  required,
+  counter,
+  maxLength,
+  children,
+}: FormFieldProps<T>) => {
   return (
     <Controller
-      name={props.controllerName}
-      control={props.control}
+      name={controllerName}
+      control={control}
       render={({ field, fieldState }) => (
         <>
           <Row justify='space-between' align='middle'>
-            {props.label !== undefined && (
+            {label !== undefined && (
               <Col flex='auto'>
-                <FormInputName name={props.label} required={props.required} />
+                <FormInputName name={label} required={required} />
               </Col>
             )}
-            {props.counter !== undefined && props.maxLength !== undefined && (
+            {counter !== undefined && maxLength !== undefined && (
               <Col>
                 <Text type='secondary'>
-                  {props.counter}/{props.maxLength}
+                  {counter}/{maxLength}
                 </Text>
               </Col>
             )}
           </Row>
 
-          <Row justify='start'>{props.children({ field, fieldState })}</Row>
+          <Row justify='start'>{children({ field, fieldState })}</Row>
 
           <Row justify='start'>
             <ErrorMessage message={fieldState.error?.message} />

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { PASSWORDS_NOT_SAME, REQUIRED, WEAK_PASSWORD } from '../../constants/validation';
+import { LICENSE_CONSENT_REQUIRED, PASSWORDS_NOT_SAME, REQUIRED, WEAK_PASSWORD } from '../../constants/validation';
 
 export const signUpSchema = yup
   .object({
@@ -18,5 +18,7 @@ export const signUpSchema = yup
       .string()
       .required(REQUIRED)
       .oneOf([yup.ref('password')], PASSWORDS_NOT_SAME),
+
+    agreement: yup.boolean().oneOf([true], LICENSE_CONSENT_REQUIRED).required(REQUIRED),
   })
   .required();

@@ -17,9 +17,10 @@ import { HttpError } from '../../modules/http-error';
 import { showAlert, hideAlert } from '../../store/';
 import { useAppDispatch } from '../../store/hooks';
 import { logIn } from '../../store/user-slice';
+import { WELCOME } from '../sign-up/sign-up-header/sign-up-header.constants';
 import type { SignIn } from './sign-in-types';
 import { signInSchema } from './sign-in-validation-schema';
-import { AUTH_ERROR } from './sign-in.constants';
+import { AUTH_ERROR, SIGN_IN } from './sign-in.constants';
 
 export const SignInForm = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ export const SignInForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[0, 32]}>
           <Col span={24}>
-            <Typography.Title level={4}>Добро пожаловать!</Typography.Title>
+            <Typography.Title level={4}>{WELCOME}</Typography.Title>
           </Col>
           {isInvalidCredentials && (
             <Col span={24}>
@@ -66,7 +67,7 @@ export const SignInForm = () => {
             </Row>
           </Col>
           <Col span={24}>
-            <SubmitButton>Авторизоваться</SubmitButton>
+            <SubmitButton>{SIGN_IN}</SubmitButton>
           </Col>
         </Row>
       </form>

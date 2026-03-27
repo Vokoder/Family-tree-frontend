@@ -21,13 +21,13 @@ import {
   GO_TO_MY_PERSON,
   LOGIN,
   MY_PERSON,
-  MY_PERSONS,
+  NO_PERSONS,
   PASSWORD_SUCCESSFULLY_CHANGED,
   SUBMIT,
 } from '../../constants/constants';
 import { AlertMessage } from '../../modules/alert';
 import { deleteProfileRequest, getCreatedPersonsRequest } from '../../modules/fetch-api';
-import { hideAlert, showAlert, useAppDispatch, useAppSelector } from '../../store';
+import { hideAlert, logOut, showAlert, useAppDispatch, useAppSelector } from '../../store';
 import type { Person } from '../../types/person.type';
 import styles from './profile.module.css';
 
@@ -78,6 +78,7 @@ export const Profile = () => {
       return;
     }
 
+    dispatch(logOut());
     dispatch(hideAlert());
   };
 
@@ -119,7 +120,7 @@ export const Profile = () => {
                 </Link>
               </List.Item>
             )}
-            locale={{ emptyText: MY_PERSONS }}
+            locale={{ emptyText: NO_PERSONS }}
           />
 
           <Space className={styles.space}>

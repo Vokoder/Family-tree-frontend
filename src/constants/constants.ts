@@ -9,6 +9,9 @@ export const SUBMIT = 'Отправить';
 export const CANCEL = 'Отменить';
 export const EFFECT_IRREVERSIBLE = 'Это действие необратимо';
 
+//  auth
+export const LOG_OUT = 'Выйти';
+
 // gender
 export const MALE = 'Мужской';
 export const FEMALE = 'Женский';
@@ -66,3 +69,6 @@ export const ERROR_GETTING_MY_PERSONS = 'Ошибка при получении 
 export const MAIN_INFORMATION = 'Основная информация';
 export const BIRTH_AND_DEATH = 'Рождение и смерть';
 export const ADDITIONALLY = 'Дополнительно';
+
+//  license
+export const LICENSE_AGREEMENT = 'Лицензионное сглашение';

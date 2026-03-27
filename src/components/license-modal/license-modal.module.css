@@ -1,0 +1,9 @@
+.spin {
+  text-align: center;
+  padding: 20px;
+}
+
+.content {
+  max-height: 60vh;
+  overflow-y: auto;
+}

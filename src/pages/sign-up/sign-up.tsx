@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 
 import { Row, Col } from 'antd';
+import { Typography } from 'antd';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SubmitButton } from '../../components/form';
 import { InputField } from '../../components/form';
+import { CheckboxField } from '../../components/form/check-box-field/check-box-field';
+import { LicenseModal } from '../../components/license-modal/license-modal';
 import { LoginPasswordFields } from '../../components/login-password-fields';
 import { SERVER_AUTH_ADRESS, SERVER_REGISTER_ADRESS } from '../../constants/env';
 import { AuthLayout } from '../../layouts/auth-layout';
@@ -16,15 +20,19 @@ import { useAppDispatch } from '../../store/hooks';
 import { logIn } from '../../store/user-slice';
 import { SignUpHeader } from './sign-up-header/sign-up-header';
 import { signUpSchema } from './sign-up-validation-schema';
-import { AUTH_ERROR } from './sign-up.constants';
+import { AUTH_ERROR, END_I_AGREE_WITH, SIGN_UP, START_I_AGREE_WITH } from './sign-up.constants';
 import type { SignUp } from './sign-up.types';
 
+const { Link } = Typography;
+
 export const SignUpForm = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useAppDispatch();
 
   const { handleSubmit, control } = useForm<SignUp>({
     mode: 'onSubmit',
     resolver: yupResolver(signUpSchema),
+    defaultValues: { agreement: false },
   });
 
   const onSubmit: SubmitHandler<SignUp> = async (data) => {
@@ -47,7 +55,6 @@ export const SignUpForm = () => {
           <Col span={24}>
             <Row gutter={[0, 16]}>
               <LoginPasswordFields<SignUp> control={control} />
-
               <Col span={24}>
                 <InputField<SignUp>
                   control={control}
@@ -61,10 +68,26 @@ export const SignUpForm = () => {
             </Row>
           </Col>
           <Col span={24}>
-            <SubmitButton>Зарегистрироваться</SubmitButton>
+            <CheckboxField<SignUp> control={control} controllerName='agreement'>
+              {START_I_AGREE_WITH}
+              <Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsModalOpen(true);
+                }}
+              >
+                {END_I_AGREE_WITH}
+              </Link>
+            </CheckboxField>
+          </Col>
+          <Col span={24}>
+            <SubmitButton>{SIGN_UP}</SubmitButton>
           </Col>
         </Row>
       </form>
+
+      <LicenseModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </AuthLayout>
   );
 };

@@ -202,7 +202,7 @@ export const Persons = () => {
           <Row gutter={[16, 16]} justify='center'>
             <Col xs={24}>
               {searchResults.length > 0 ? (
-                searchResults.map((person, idx) => <PersonCard key={idx} person={person} />)
+                searchResults.map((person) => <PersonCard key={person.id} person={person} />)
               ) : (
                 <div className={styles.empty}>{NOTHING_FOUND}</div>
               )}

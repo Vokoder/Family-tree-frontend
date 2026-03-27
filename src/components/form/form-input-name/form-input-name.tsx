@@ -2,12 +2,12 @@ import { Typography } from 'antd';
 
 import formStyles from './form-input-name.module.css';
 
-interface FormInputnameProps {
+interface FormInputNameProps {
   name: string;
   required: boolean;
 }
 
-export const FormInputName = (props: FormInputnameProps) => {
+export const FormInputName = (props: FormInputNameProps) => {
   return (
     <Typography.Title level={5} className={formStyles.formInputName}>
       {props.name}

@@ -1,6 +1,8 @@
 import axios from 'axios';
+import qs from 'qs';
 
 import {
+  LICENSE_ADRESS,
   SERVER_ADRESS,
   SERVER_LOGOUT_ADRESS,
   SERVER_PERSON_ADRESS,
@@ -10,6 +12,7 @@ import {
   SERVER_USER_ADRESS,
 } from '../constants/env';
 import { AXIOS_ERROR } from '../constants/errors.constant';
+import type { LicenseData } from '../types/license.type';
 import type { Person, PersonDto, PersonFilters } from '../types/person.type';
 import type { Relation, RelationDto } from '../types/relation.type';
 import type { TypeOfRelation } from '../types/types-of-relations.type';
@@ -20,7 +23,13 @@ type QueryParams = Record<string, string | number | boolean | string[] | number[
 
 const axiosGetRequest = async <T>(adress: string, params?: QueryParams): Promise<T> => {
   try {
-    const res = await axios.get(adress, { withCredentials: true, params });
+    const res = await axios.get(adress, {
+      withCredentials: true,
+      params,
+      paramsSerializer: (params) => {
+        return qs.stringify(params, { arrayFormat: 'repeat' });
+      },
+    });
     if (res.status !== 200) throw new HttpError(res.status, res.data);
     return res.data as T;
   } catch (error) {
@@ -159,5 +168,15 @@ export const getTypesOfRelations = async (): Promise<TypeOfRelation[]> => {
   } catch (error) {
     console.error(error);
     return [];
+  }
+};
+
+export const getLicense = async (): Promise<LicenseData | null> => {
+  try {
+    const license = (await axiosGetRequest(LICENSE_ADRESS)) as LicenseData;
+    return license;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };

@@ -4,3 +4,4 @@ export const INVALID_CREDENTIAL = 'Неверный логин или парол
 export const GET_PROFILE_FAILED = 'Не удалось получить данные аккаунта';
 export const REQUIRED = 'Обязательное поле';
 export const PASSWORDS_NOT_SAME = 'Пароли не совпадают';
+export const LICENSE_CONSENT_REQUIRED = 'Необходимо согласиться с условиями';

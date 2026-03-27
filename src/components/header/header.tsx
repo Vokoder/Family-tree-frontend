@@ -16,17 +16,15 @@ export const Header = ({ children }: { children: ReactNode }) => {
   const showIcon = !screens.sm;
 
   return (
-    <>
-      <Row className={styles.mainContainer} justify='space-between'>
-        <Col span={12} sm={11} lg={9} xl={8} className={styles.children}>
-          {children}
-        </Col>
-        <Col span={12} sm={12} lg={8} xl={6} className={styles.logOutButton}>
-          <Button color='danger' variant='outlined' onClick={logOut}>
-            {showIcon ? <LogoutOutlined /> : EXIT_PROFILE}
-          </Button>
-        </Col>
-      </Row>
-    </>
+    <Row className={styles.mainContainer} justify='space-between'>
+      <Col span={12} sm={11} lg={9} xl={8} className={styles.children}>
+        {children}
+      </Col>
+      <Col span={12} sm={12} lg={8} xl={6} className={styles.logOutButton}>
+        <Button color='danger' variant='outlined' onClick={logOut}>
+          {showIcon ? <LogoutOutlined /> : EXIT_PROFILE}
+        </Button>
+      </Col>
+    </Row>
   );
 };

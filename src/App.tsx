@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { PERSONS_PATH, PROFILE_PATH, SIGN_IN_PATH, SIGN_UP_PATH } from './constants/routes.constant';
 import NotFound from './pages/not-found/not-found';
-import { Persons } from './pages/persons/persons.tsx';
+import { Persons } from './pages/persons/persons';
 import { Profile } from './pages/profile/profile';
 import { SignInForm } from './pages/sign-in';
 import { SignUpForm } from './pages/sign-up';
