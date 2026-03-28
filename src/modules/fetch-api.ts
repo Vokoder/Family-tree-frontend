@@ -17,7 +17,7 @@ import {
 import { AXIOS_ERROR } from '../constants/errors.constant';
 import { SIGN_IN_PATH } from '../constants/routes.constant';
 import type { LicenseData } from '../types/license.type';
-import type { Person, PersonDto, PersonFilters } from '../types/person.type';
+import type { CreatePersonDto, Person, PersonFilters } from '../types/person.type';
 import type { Relation, RelationDto } from '../types/relation.type';
 import type { TypeOfRelation } from '../types/types-of-relations.type';
 import type { User } from '../types/user.type';
@@ -166,7 +166,7 @@ export const getCreatedPersonsRequest = async (uid: string): Promise<Person[]> =
   return [];
 };
 
-export const createPersonRequest = async (personDto: PersonDto): Promise<Person> => {
+export const createPersonRequest = async (personDto: CreatePersonDto): Promise<Person> => {
   const person = await axiosPostRequest<Person>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}`, personDto);
   return person;
 };

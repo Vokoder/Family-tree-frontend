@@ -11,15 +11,7 @@ export const createPersonSchema: yup.ObjectSchema<CreatePersonFields> = yup
     gender: yup.boolean().required(REQUIRED),
     country: yup.string().trim().optional(),
     city: yup.string().trim().optional(),
-    relation: yup
-      .string()
-      .trim()
-      .optional()
-      .when('$isForSelf', {
-        is: false,
-        then: (s) => s.required(REQUIRED),
-        otherwise: (s) => s.optional(),
-      }),
+    relation: yup.string().trim().optional(),
     dateOfBirthday: yup.date().optional(),
     placeOfBirthday: yup.string().trim().optional(),
     dateOfDeath: yup.date().optional(),

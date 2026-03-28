@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { PERSONS_PATH } from '../../constants/routes.constant';
 import styles from './not-found.module.css';
 
 export const NotFound: React.FC = () => {
@@ -10,7 +11,7 @@ export const NotFound: React.FC = () => {
         <h1 className={styles.title}>404</h1>
         <p className={styles.message}>Страница не найдена</p>
         <div className={styles.actions}>
-          <Link to='/' className={styles.link}>
+          <Link to={`/${PERSONS_PATH}`} className={styles.link}>
             На главную
           </Link>
         </div>

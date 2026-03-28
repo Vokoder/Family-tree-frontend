@@ -19,3 +19,12 @@
 .space {
   margin-top: 24px
 }
+
+.backButton {
+  margin-bottom: 16px;
+}
+
+.new_person_button {
+  display: flex;
+  justify-content: center;
+}

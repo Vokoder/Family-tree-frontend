@@ -3,7 +3,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { createPersonRequest, createRelationRequest } from '../modules/fetch-api';
+import { createPersonRequest } from '../modules/fetch-api';
 import { createPersonSchema } from '../schemas/create-pesron-validation-schema';
 import { useAppSelector } from '../store';
 import type { CreatePersonFields } from '../types/person.type';
@@ -28,7 +28,6 @@ export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: Creat
   } = useForm<CreatePersonFields>({
     mode: 'onChange',
     resolver: yupResolver(createPersonSchema),
-    context: { isForSelf },
     defaultValues: {
       lastName: '',
       firstName: '',
@@ -40,17 +39,17 @@ export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: Creat
     const { relation, ...personData } = data;
     setIsSubmitting(true);
     try {
-      // Идеально: отправить это одним запросом на бэк или использовать batch в Firebase
-      const person = await createPersonRequest(personData);
-
-      if (!isForSelf && relation && user?.personId) {
-        await createRelationRequest({
-          sourcePersonId: user.personId,
-          targetPersonId: person.id,
-          relationId: relation,
-          ownerId: user.id,
-        });
-      }
+      await createPersonRequest({
+        person: personData,
+        isForSelf,
+        relation:
+          !isForSelf && relation && user?.personId
+            ? {
+                sourcePersonId: user.personId,
+                relationId: relation,
+              }
+            : {},
+      });
 
       reset();
       onSubmit(200);

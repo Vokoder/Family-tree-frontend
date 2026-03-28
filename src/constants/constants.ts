@@ -8,6 +8,7 @@ export const RESET = 'Сбросить';
 export const SUBMIT = 'Отправить';
 export const CANCEL = 'Отменить';
 export const BACK = 'Назад';
+export const TO_MAIN_PAGE = 'На главную страницу';
 export const EFFECT_IRREVERSIBLE = 'Это действие необратимо';
 export const NOT_SPECIFIED = 'Не указано';
 
@@ -66,12 +67,14 @@ export const ERROR_DELETING_PROFILE = 'Ошибка при удалении пр
 export const LOGIN = 'Логин';
 export const DATE_OF_CREATION = 'Дата создания';
 export const MY_PERSON = 'Моя анкета';
+export const CREATED_PERSONS = 'Созданные мною анкеты';
 export const GO_TO_MY_PERSON = 'Перейти к моей анкете';
 export const MY_PERSONS = 'Созданные мною анкеты';
 export const NO_PERSONS = 'Вы еще не создали ни одной записи';
 export const DELETE_ACCOUNT = 'Удалить аккаунт';
 export const CHANGE_PASSWORD = 'Изменить пароль';
 export const ERROR_GETTING_MY_PERSONS = 'Ошибка при получении персон';
+export const ACCOUNT_MANAGEMENT = 'Управление аккаунтом';
 
 //  sections
 export const MAIN_INFORMATION = 'Основная информация';

@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button, Card, Descriptions, Divider, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Descriptions, Empty, Space, Tag, Typography } from 'antd';
 
 import { ArrowLeftOutlined, ManOutlined, WomanOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
 import { LoadingWrapper } from '../../components/loading-wrapper/loading-wrapper';
 import {
-  ADDITIONALLY,
   BACK,
-  BIOGRAPHY,
-  BIRTH_AND_DEATH,
   CONTACT_INFORMATION,
   DATE_OF_BIRTHDAY,
   DATE_OF_DEATH,
   FEMALE_NOMINATIVE,
-  MAIN_INFORMATION,
   MALE_NOMINATIVE,
   NOT_SPECIFIED,
   OWNER_ID,
@@ -39,7 +35,7 @@ export const Person = () => {
     return (
       <div style={{ padding: '24px' }}>
         <Button onClick={() => navigate(-1)} icon={<ArrowLeftOutlined />}>
-          Назад
+          {BACK}
         </Button>
         <Empty description='Персона не найдена' style={{ marginTop: 50 }} />
       </div>

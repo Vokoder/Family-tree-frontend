@@ -4,7 +4,6 @@ import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { Col, DatePicker, Divider, Form, Input, Modal, Row, Select } from 'antd';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import dayjs from 'dayjs';
 
 import {
   ADDITIONALLY,

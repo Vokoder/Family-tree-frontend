@@ -1,6 +1,7 @@
 import type z from 'zod';
 
 import type { personFilterSchema } from '../schemas/person.schema.ts';
+import type { RelationDto } from './relation.type.ts';
 
 export interface Person {
   id: string;
@@ -37,12 +38,14 @@ export type CreatePersonFields = {
   relation?: string;
 };
 
-export type UpdatePersonFields = Partial<CreatePersonFields>; //
-export type PersonFormFields = CreatePersonFields | UpdatePersonFields; //
-
 export type PersonFilters = z.infer<typeof personFilterSchema>;
 
 export type PersonDto = Partial<Person>;
+export type CreatePersonDto = {
+  person: PersonDto;
+  isForSelf: boolean;
+  relation?: RelationDto;
+};
 
 //  поля, присутствующие во всех интерфейсах
 export const personFields: (keyof Person)[] = [

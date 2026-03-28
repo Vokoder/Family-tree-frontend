@@ -141,24 +141,6 @@ export const PersonModal = <T extends FieldValues>({
           </Col>
         </Row>
 
-        {!isForSelf && (
-          <Form.Item label={RELATION} validateStatus={errors.relation ? 'error' : ''} help={getHelp('relation')}>
-            <Controller
-              name={'relation' as Path<T>}
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  placeholder={SELECT_RELATION_TYPE}
-                  options={typesOfRelations.map((typeOfRelation) => {
-                    return { value: typeOfRelation.id, label: typeOfRelation.id };
-                  })}
-                />
-              )}
-            />
-          </Form.Item>
-        )}
-
         <Divider orientation='horizontal'>{BIRTH_AND_DEATH}</Divider>
         <Row gutter={16}>
           <Col span={12}>
@@ -263,6 +245,24 @@ export const PersonModal = <T extends FieldValues>({
             render={({ field }) => <Input {...field} />}
           />
         </Form.Item>
+
+        {!isForSelf && (
+          <Form.Item label={RELATION} validateStatus={errors.relation ? 'error' : ''} help={getHelp('relation')}>
+            <Controller
+              name={'relation' as Path<T>}
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  placeholder={SELECT_RELATION_TYPE}
+                  options={typesOfRelations.map((typeOfRelation) => {
+                    return { value: typeOfRelation.id, label: typeOfRelation.id };
+                  })}
+                />
+              )}
+            />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );

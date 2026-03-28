@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { getTypesOfRelations, requestWithRefresh } from '../modules/fetch-api';
+import { getTypesOfRelations } from '../modules/fetch-api';
 import type { TypeOfRelation } from '../types/types-of-relations.type';
 
 type TypesOfRelationsState = {
@@ -10,7 +10,6 @@ type TypesOfRelationsState = {
 
 export const fetchRelations = createAsyncThunk('relations/fetch', async (_, { rejectWithValue }) => {
   try {
-    // return await requestWithRefresh(() => getTypesOfRelations());
     return await getTypesOfRelations();
   } catch (error) {
     return rejectWithValue(error);

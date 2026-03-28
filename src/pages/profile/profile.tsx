@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Button, Card, Descriptions, Divider, List, Popconfirm, Space, Tag } from 'antd';
 
+import { HomeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
 import { AlertMessage } from '../../components/alert';
 import { ChangePasswordModal } from '../../components/change-password-modal';
 import { CreatePersonModal } from '../../components/create-person-modal';
 import {
+  ACCOUNT_MANAGEMENT,
   CANCEL,
   CHANGE_PASSWORD,
   CREATE_PERSON,
+  CREATED_PERSONS,
   DATE_OF_CREATION,
   DELETE_ACCOUNT,
   EFFECT_IRREVERSIBLE,
@@ -27,7 +30,9 @@ import {
   NO_PERSONS,
   PASSWORD_SUCCESSFULLY_CHANGED,
   SUBMIT,
+  TO_MAIN_PAGE,
 } from '../../constants/constants';
+import { PERSONS_PATH } from '../../constants/routes.constant';
 import { deleteProfileRequest, getCreatedPersonsRequest, logOutRequest } from '../../modules/fetch-api';
 import { hideAlert, logOut as logOutAction, showAlert, useAppDispatch, useAppSelector } from '../../store';
 import type { Person } from '../../types/person.type';
@@ -36,10 +41,12 @@ import styles from './profile.module.css';
 export const Profile = () => {
   const alert = useAppSelector((store) => store.alert.alert);
   const user = useAppSelector((state) => state.user.user);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
   const [createdPersons, setCreatedPersons] = useState<Person[]>([]);
+  const [isForSelf, setIsForSelf] = useState(false);
 
   const getCreatedPersons = async (): Promise<void> => {
     if (!user?.id) {
@@ -101,6 +108,16 @@ export const Profile = () => {
     logOut(true);
   };
 
+  const handleOpenCreatePersonForSelf = () => {
+    setIsForSelf(true);
+    setIsPersonModalOpen(true);
+  };
+
+  const handleOpenCreatePerson = () => {
+    setIsForSelf(false);
+    setIsPersonModalOpen(true);
+  };
+
   useEffect(() => {
     getCreatedPersons();
   }, [user?.id]);
@@ -108,6 +125,9 @@ export const Profile = () => {
   return (
     <div className={styles.page}>
       <div className={styles.screen_page}>
+        <Button icon={<HomeOutlined />} onClick={() => navigate(`/${PERSONS_PATH}`)} className={styles.backButton}>
+          {TO_MAIN_PAGE}
+        </Button>
         <Card title='Мой профиль' extra={<Tag color='blue'>{user?.roleId}</Tag>}>
           <Descriptions column={1} bordered size='small'>
             <Descriptions.Item label={LOGIN}>{user?.login}</Descriptions.Item>
@@ -116,22 +136,23 @@ export const Profile = () => {
             </Descriptions.Item>
             <Descriptions.Item label={MY_PERSON}>
               {user?.personId ? (
-                <Link to={`/persons/${user.personId}`}>{GO_TO_MY_PERSON}</Link>
+                <Link to={`/${PERSONS_PATH}/${user.personId}`}>{GO_TO_MY_PERSON}</Link>
               ) : (
-                <Button type='link' onClick={() => setIsPersonModalOpen(true)}>
+                <Button type='link' onClick={handleOpenCreatePersonForSelf}>
                   {CREATE_PERSON}
                 </Button>
               )}
             </Descriptions.Item>
           </Descriptions>
 
-          <Divider orientation='vertical'>{MY_PERSON}</Divider>
+          <Divider orientation='horizontal'>{CREATED_PERSONS}</Divider>
+
           <List
             dataSource={createdPersons}
             renderItem={(p: Person) => (
               <List.Item>
                 <Link
-                  to={`/persons/${p.id}`}
+                  to={`/${PERSONS_PATH}/${p.id}`}
                   className={styles.person_link}
                   style={{ color: p.gender ? '#1677ff' : '#eb2f96' }}
                 >
@@ -141,6 +162,13 @@ export const Profile = () => {
             )}
             locale={{ emptyText: NO_PERSONS }}
           />
+          <div className={styles.new_person_button}>
+            <Button type='default' onClick={handleOpenCreatePerson}>
+              {CREATE_PERSON}
+            </Button>
+          </div>
+
+          <Divider orientation='horizontal'>{ACCOUNT_MANAGEMENT}</Divider>
 
           <Space className={styles.space}>
             <Button onClick={() => setIsPassModalOpen(true)}>{CHANGE_PASSWORD}</Button>
@@ -163,7 +191,7 @@ export const Profile = () => {
 
         <CreatePersonModal
           open={isPersonModalOpen}
-          isForSelf={true}
+          isForSelf={isForSelf}
           onCancel={() => setIsPersonModalOpen(false)}
           onSubmit={handleCreatePerson}
         />

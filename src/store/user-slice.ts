@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { getMyUserRequest, requestWithRefresh } from '../modules/fetch-api';
+import { getMyUserRequest } from '../modules/fetch-api';
 import type { User } from '../types/user.type';
 
 type UserState = {
@@ -10,7 +10,6 @@ type UserState = {
 
 export const fetchUser = createAsyncThunk('user/fetch', async (_, { rejectWithValue }) => {
   try {
-    // return await requestWithRefresh(() => getMyUserRequest());
     return await getMyUserRequest();
   } catch (error) {
     return rejectWithValue(error);
