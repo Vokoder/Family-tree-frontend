@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { AlertType } from '../modules/alert';
+import type { AlertType } from '../components/alert';
 
 type AlertState = {
   alert: AlertType | null;

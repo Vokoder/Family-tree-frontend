@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Row, Col, Typography } from 'antd';
 
-import { AlertMessage } from '../modules/alert';
+import { AlertMessage } from '../components/alert';
 import { useAppSelector } from '../store/hooks';
 import type { AuthLayoutMode, ModeConfig } from '../types/auth-layout.type';
 import styles from './auth-layout.module.css';

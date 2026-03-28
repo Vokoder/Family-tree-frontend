@@ -1,0 +1,32 @@
+.screen {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.backButton {
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+}
+
+.space {
+  margin-top: 8px;
+}
+
+.paragraph {
+  font-size: 16px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.id_div {
+  margin-top: 32px;
+  text-align: right;
+}
+
+.fullname_div {
+  margin-bottom: 24px;
+}

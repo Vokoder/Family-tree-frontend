@@ -37,6 +37,9 @@ export type CreatePersonFields = {
   relation?: string;
 };
 
+export type UpdatePersonFields = Partial<CreatePersonFields>; //
+export type PersonFormFields = CreatePersonFields | UpdatePersonFields; //
+
 export type PersonFilters = z.infer<typeof personFilterSchema>;
 
 export type PersonDto = Partial<Person>;

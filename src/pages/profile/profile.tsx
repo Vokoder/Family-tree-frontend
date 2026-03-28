@@ -5,6 +5,7 @@ import { Button, Card, Descriptions, Divider, List, Popconfirm, Space, Tag } fro
 
 import dayjs from 'dayjs';
 
+import { AlertMessage } from '../../components/alert';
 import { ChangePasswordModal } from '../../components/change-password-modal';
 import { CreatePersonModal } from '../../components/create-person-modal';
 import {
@@ -27,7 +28,6 @@ import {
   PASSWORD_SUCCESSFULLY_CHANGED,
   SUBMIT,
 } from '../../constants/constants';
-import { AlertMessage } from '../../modules/alert';
 import { deleteProfileRequest, getCreatedPersonsRequest, logOutRequest } from '../../modules/fetch-api';
 import { hideAlert, logOut as logOutAction, showAlert, useAppDispatch, useAppSelector } from '../../store';
 import type { Person } from '../../types/person.type';

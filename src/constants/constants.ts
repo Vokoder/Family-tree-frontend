@@ -7,7 +7,9 @@ export const SEARCH = 'Найти';
 export const RESET = 'Сбросить';
 export const SUBMIT = 'Отправить';
 export const CANCEL = 'Отменить';
+export const BACK = 'Назад';
 export const EFFECT_IRREVERSIBLE = 'Это действие необратимо';
+export const NOT_SPECIFIED = 'Не указано';
 
 //  auth
 export const LOG_OUT = 'Выйти из аккуанта';
@@ -15,7 +17,9 @@ export const LOG_OUT_ALL = 'Выйти из всех аккаунтов';
 
 // gender
 export const MALE = 'Мужской';
+export const MALE_NOMINATIVE = 'Мужчина';
 export const FEMALE = 'Женский';
+export const FEMALE_NOMINATIVE = 'Женщина';
 
 //  person
 export const DATE_OF_BIRTHDAY = 'Дата рождения';
@@ -33,6 +37,11 @@ export const CONTACT_INFORMATION = 'Контактная информация';
 export const BIOGRAPHY = 'Биография';
 export const RELATION = 'Родственная связь';
 export const KEYWORDS = 'Ключевые слова (через запятую)';
+export const OWNER_ID = 'ID владельца';
+export const CREATE_MY_PERSON = 'Создать мою анкету';
+export const CREATE_PERSON = 'Создать анкету';
+export const UPDATE_MY_PERSON = 'Обновить мою анкету';
+export const UPDATE_PERSON = 'Обновить анкету';
 
 //  go to profile button
 export const LOG_IN = 'Войти';
@@ -47,8 +56,6 @@ export const SEARCH_PLACE_OF_DEATH = 'Введите место смерти';
 export const SEARCH_COUNTRY = 'Введите страну';
 export const SEARCH_CITY = 'Введите город';
 export const SELECT_KEYWORDS = 'Введите ключевые слова';
-export const CREATE_MY_PERSON = 'Создать мою анкету';
-export const CREATE_PERSON = 'Создать анкету';
 export const SELECT_RELATION_TYPE = 'Выберите тип родственной связи';
 
 //  profile

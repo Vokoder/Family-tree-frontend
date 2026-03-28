@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import qs from 'qs';
 
 import {
@@ -9,11 +9,13 @@ import {
   SERVER_LOGOUT_ALL_ADRESS,
   SERVER_PERSON_ADRESS,
   SERVER_PROFILE_ADRESS,
+  SERVER_REFRASH_ADRESS,
   SERVER_RELATION_ADRESS,
   SERVER_TYPES_OF_RELATIONS_ADRESS,
   SERVER_USER_ADRESS,
 } from '../constants/env';
 import { AXIOS_ERROR } from '../constants/errors.constant';
+import { SIGN_IN_PATH } from '../constants/routes.constant';
 import type { LicenseData } from '../types/license.type';
 import type { Person, PersonDto, PersonFilters } from '../types/person.type';
 import type { Relation, RelationDto } from '../types/relation.type';
@@ -25,13 +27,15 @@ type QueryParams = Record<string, string | number | boolean | string[] | number[
 
 const axiosGetRequest = async <T>(adress: string, params?: QueryParams): Promise<T> => {
   try {
-    const res = await axios.get(adress, {
-      withCredentials: true,
-      params,
-      paramsSerializer: (params) => {
-        return qs.stringify(params, { arrayFormat: 'repeat' });
-      },
-    });
+    const res = await requestWithRefresh(() =>
+      axios.get(adress, {
+        withCredentials: true,
+        params,
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { arrayFormat: 'repeat' });
+        },
+      }),
+    );
     if (res.status !== 200) throw new HttpError(res.status, res.data);
     return res.data as T;
   } catch (error) {
@@ -44,10 +48,12 @@ const axiosGetRequest = async <T>(adress: string, params?: QueryParams): Promise
 
 const axiosPostRequest = async <T>(adress: string, body: object = {}): Promise<T> => {
   try {
-    const res = await axios.post(adress, body, {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    });
+    const res = await requestWithRefresh(() =>
+      axios.post(adress, body, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      }),
+    );
     if (res.status !== 200) throw new HttpError(res.status, res.data);
     return res.data as T;
   } catch (error) {
@@ -91,6 +97,26 @@ export const logOutRequest = async (all: boolean): Promise<number> => {
   }
 };
 
+const refreshRequest = async () => {
+  try {
+    const res = await axios.post(
+      `${SERVER_ADRESS}${SERVER_AUTH_ADRESS}${SERVER_REFRASH_ADRESS}`,
+      {},
+      {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      },
+    );
+    if (res.status !== 200) throw new HttpError(res.status, res.data);
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new HttpError(error.status, error.message);
+    }
+    throw new HttpError(500, (error as Error)?.message ?? AXIOS_ERROR);
+  }
+};
+
 export const deleteProfileRequest = async (uid?: string): Promise<number> => {
   try {
     await axiosDeleteRequest(`${SERVER_ADRESS}${SERVER_PROFILE_ADRESS}`, { uid });
@@ -98,6 +124,16 @@ export const deleteProfileRequest = async (uid?: string): Promise<number> => {
   } catch (error) {
     console.error(error);
     return 500;
+  }
+};
+
+export const getPersonRequest = async (uid: string): Promise<Person | null> => {
+  try {
+    const person = await axiosGetRequest<Person | null>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}${uid}`);
+    return person;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
 
@@ -121,7 +157,7 @@ export const getPersonsRequest = async (filter?: PersonFilters): Promise<Person[
 
 export const getCreatedPersonsRequest = async (uid: string): Promise<Person[]> => {
   try {
-    const persons = axiosGetRequest<Person[]>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}/user`, { uid });
+    const persons = axiosGetRequest<Person[]>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}user`, { uid });
     return persons;
   } catch (error) {
     console.error(error);
@@ -188,5 +224,35 @@ export const getLicense = async (): Promise<LicenseData | null> => {
   } catch (error) {
     console.error(error);
     return null;
+  }
+};
+
+export const requestWithRefresh = async <T>(requestFunction: () => Promise<T>): Promise<T> => {
+  try {
+    return await requestFunction();
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 401) {
+        try {
+          await refreshRequest();
+          return await requestFunction();
+        } catch (refreshError) {
+          handleRedirectToLogin();
+          return Promise.reject(refreshError);
+        }
+      }
+      throw axiosError;
+    }
+    throw error;
+  }
+};
+
+const handleRedirectToLogin = () => {
+  const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+  const targetPath = SIGN_IN_PATH.replace(/^\/|\/$/g, '');
+
+  if (currentPath !== targetPath) {
+    window.location.href = `/${targetPath}`;
   }
 };

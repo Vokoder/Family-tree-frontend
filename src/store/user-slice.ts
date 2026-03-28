@@ -1,13 +1,23 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { getMyUserRequest } from '../modules/fetch-api';
+import { getMyUserRequest, requestWithRefresh } from '../modules/fetch-api';
 import type { User } from '../types/user.type';
 
 type UserState = {
   user: User | null;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 };
 
-const initialState: UserState = { user: await getMyUserRequest() };
+export const fetchUser = createAsyncThunk('user/fetch', async (_, { rejectWithValue }) => {
+  try {
+    // return await requestWithRefresh(() => getMyUserRequest());
+    return await getMyUserRequest();
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+
+const initialState: UserState = { user: null, status: 'idle' };
 
 const userSlice = createSlice({
   name: 'user',
@@ -19,6 +29,20 @@ const userSlice = createSlice({
     logOut(state) {
       state.user = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = 'succeeded';
+      })
+      .addCase(fetchUser.rejected, (state) => {
+        state.user = null;
+        state.status = 'failed';
+      });
   },
 });
 
