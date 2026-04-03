@@ -4,9 +4,9 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { createPersonRequest } from '../modules/fetch-api';
-import { createPersonSchema } from '../schemas/create-pesron-validation-schema';
+import { personSchema } from '../schemas/pesron-validation-schema';
 import { useAppSelector } from '../store';
-import type { CreatePersonFields } from '../types/person.type';
+import type { CreateUpdatePersonFields } from '../types/person.type';
 import { PersonModal } from './person-modal';
 
 interface CreatePersonProps {
@@ -25,9 +25,9 @@ export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: Creat
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CreatePersonFields>({
+  } = useForm<CreateUpdatePersonFields>({
     mode: 'onChange',
-    resolver: yupResolver(createPersonSchema),
+    resolver: yupResolver(personSchema),
     defaultValues: {
       lastName: '',
       firstName: '',
@@ -35,7 +35,7 @@ export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: Creat
     },
   });
 
-  const submitHandler: SubmitHandler<CreatePersonFields> = async (data: CreatePersonFields) => {
+  const submitHandler: SubmitHandler<CreateUpdatePersonFields> = async (data: CreateUpdatePersonFields) => {
     const { relation, ...personData } = data;
     setIsSubmitting(true);
     try {

@@ -32,3 +32,6 @@ export const SERVER_TREE_ADRESS = env.VITE_SERVER_TREE_ADRESS;
 
 // license
 export const LICENSE_ADRESS = env.VITE_LICENSE_ADRESS;
+
+export const USER_DEFAULT_ROLE = env.VITE_USER_DEFAULT_ROLE;
+export const USER_ADMIN_ROLE = env.VITE_USER_ADMIN_ROLE;

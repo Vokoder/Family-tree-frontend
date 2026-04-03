@@ -10,11 +10,7 @@ export interface Relation {
   ownerId: string;
 }
 
-export type FirebaseRelation = Omit<Relation, 'id'>;
-
 export type RelationFilters = z.infer<typeof relationFilterSchema>;
-export type FirebaseRelationFilter = Partial<FirebaseRelation>;
-
 export type RelationDto = Partial<Relation>;
 
 //  минимально необходимые поля для связи

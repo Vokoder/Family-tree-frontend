@@ -17,11 +17,20 @@ import {
 import { AXIOS_ERROR } from '../constants/errors.constant';
 import { SIGN_IN_PATH } from '../constants/routes.constant';
 import type { LicenseData } from '../types/license.type';
-import type { CreatePersonDto, Person, PersonFilters } from '../types/person.type';
-import type { Relation, RelationDto } from '../types/relation.type';
+import type { CreatePersonDto, Person, PersonFilters, UpdatePersonDto } from '../types/person.type';
+import type { Relation, RelationDto, RelationFilters } from '../types/relation.type';
 import type { TypeOfRelation } from '../types/types-of-relations.type';
 import type { User } from '../types/user.type';
 import { HttpError } from './http-error';
+
+const handleRedirectToLogin = () => {
+  const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+  const targetPath = SIGN_IN_PATH.replace(/^\/|\/$/g, '');
+
+  if (currentPath !== targetPath) {
+    window.location.href = `/${targetPath}`;
+  }
+};
 
 type QueryParams = Record<string, string | number | boolean | string[] | number[] | undefined | null>;
 
@@ -66,11 +75,13 @@ const axiosPostRequest = async <T>(adress: string, body: object = {}): Promise<T
 
 const axiosDeleteRequest = async (adress: string, body: object = {}): Promise<void> => {
   try {
-    const res = await axios.delete(adress, {
-      data: body,
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    });
+    const res = await await requestWithRefresh(() =>
+      axios.delete(adress, {
+        data: body,
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      }),
+    );
     if (res.status !== 200) throw new HttpError(res.status, res.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -171,6 +182,16 @@ export const createPersonRequest = async (personDto: CreatePersonDto): Promise<P
   return person;
 };
 
+export const deletePersonRequest = async (personId: string): Promise<number> => {
+  try {
+    await axiosDeleteRequest(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}${personId}`);
+    return 200;
+  } catch (error) {
+    console.error(error);
+    return 500;
+  }
+};
+
 export const getMyUserRequest = async (): Promise<User | null> => {
   try {
     const user = await axiosGetRequest<User>(`${SERVER_ADRESS}${SERVER_USER_ADRESS}`);
@@ -203,8 +224,14 @@ export const updateRelationRequest = async (relationId: string, relationDto: Rel
   return relation;
 };
 
-export const deleteRelationRequest = async (relationId: string): Promise<void> => {
-  await axiosDeleteRequest(`${SERVER_ADRESS}${SERVER_RELATION_ADRESS}`, { relationId });
+export const deleteRelationRequest = async (relationId: string): Promise<number> => {
+  try {
+    await axiosDeleteRequest(`${SERVER_ADRESS}${SERVER_RELATION_ADRESS}${relationId}`);
+    return 200;
+  } catch (error) {
+    console.error(error);
+    return 500;
+  }
 };
 
 export const getTypesOfRelations = async (): Promise<TypeOfRelation[]> => {
@@ -248,11 +275,21 @@ export const requestWithRefresh = async <T>(requestFunction: () => Promise<T>): 
   }
 };
 
-const handleRedirectToLogin = () => {
-  const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
-  const targetPath = SIGN_IN_PATH.replace(/^\/|\/$/g, '');
+export const getRelationRequest = async (relationFilter: RelationFilters): Promise<Relation[]> => {
+  try {
+    return await axiosGetRequest<Relation[]>(`${SERVER_ADRESS}${SERVER_RELATION_ADRESS}`, relationFilter);
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
 
-  if (currentPath !== targetPath) {
-    window.location.href = `/${targetPath}`;
+export const updatePersonRequest = async (personId: string, person: UpdatePersonDto): Promise<number> => {
+  try {
+    await axiosPostRequest(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}${personId}`, person);
+    return 200;
+  } catch (error) {
+    console.error(error);
+    return 500;
   }
 };

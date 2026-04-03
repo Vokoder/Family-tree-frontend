@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button, Card, Descriptions, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Descriptions, Empty, Popconfirm, Space, Tag, Typography } from 'antd';
 
 import { ArrowLeftOutlined, ManOutlined, WomanOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import { DeletePersonButton } from '../../components/delete-person-button/delete-person-button';
 import { LoadingWrapper } from '../../components/loading-wrapper/loading-wrapper';
 import {
   BACK,
@@ -20,7 +21,9 @@ import {
   PLACE_OF_DEATH,
   RELATED_LOCATIONS,
 } from '../../constants/constants';
+import { USER_ADMIN_ROLE } from '../../constants/env';
 import { getPersonRequest } from '../../modules/fetch-api';
+import { useAppSelector } from '../../store';
 import type { Person as PersonType } from '../../types/person.type';
 import styles from './person.module.css';
 
@@ -30,6 +33,8 @@ export const Person = () => {
   const navigate = useNavigate();
   const [person, setPerson] = useState<PersonType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const user = useAppSelector((store) => store.user.user);
 
   if ((!person && !loading) || !uid) {
     return (
@@ -121,6 +126,12 @@ export const Person = () => {
                 {OWNER_ID}: {person?.ownerId}
               </Text>
             </div>
+          )}
+
+          {person?.id && (person?.ownerId === user?.id || user?.roleId === USER_ADMIN_ROLE) && (
+            <>
+              <DeletePersonButton id={person.id} />
+            </>
           )}
         </Card>
       </LoadingWrapper>

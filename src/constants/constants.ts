@@ -43,6 +43,7 @@ export const CREATE_MY_PERSON = 'Создать мою анкету';
 export const CREATE_PERSON = 'Создать анкету';
 export const UPDATE_MY_PERSON = 'Обновить мою анкету';
 export const UPDATE_PERSON = 'Обновить анкету';
+export const DELETE_PERSON = 'Удалить анкету';
 
 //  go to profile button
 export const LOG_IN = 'Войти';
@@ -63,7 +64,8 @@ export const SELECT_RELATION_TYPE = 'Выберите тип родственн�
 export const ERROR_CHANGING_PASSWORD = 'Ошибка при изменении пароля. Возможно вы ввели не верный пароль';
 export const PASSWORD_SUCCESSFULLY_CHANGED = 'Пароль изменён';
 export const ERROR_CREATING_PERSON = 'Ошибка при создании персоны';
-export const ERROR_DELETING_PROFILE = 'Ошибка при удалении профиля';
+export const ERROR_UPDATING_PERSON = 'Ошибка при обновлении персоны';
+export const ERROR_DELETION_PROFILE = 'Ошибка при удалении профиля';
 export const LOGIN = 'Логин';
 export const DATE_OF_CREATION = 'Дата создания';
 export const MY_PERSON = 'Моя анкета';
@@ -75,6 +77,7 @@ export const DELETE_ACCOUNT = 'Удалить аккаунт';
 export const CHANGE_PASSWORD = 'Изменить пароль';
 export const ERROR_GETTING_MY_PERSONS = 'Ошибка при получении персон';
 export const ACCOUNT_MANAGEMENT = 'Управление аккаунтом';
+export const NO_CHANGING_DATA = 'Нет данных для изменений';
 
 //  sections
 export const MAIN_INFORMATION = 'Основная информация';

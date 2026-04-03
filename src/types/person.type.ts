@@ -21,7 +21,7 @@ export interface Person {
   contactInformation?: string;
 }
 
-export type CreatePersonFields = {
+export type CreateUpdatePersonFields = {
   lastName: string;
   firstName: string;
   middleName?: string;
@@ -40,7 +40,11 @@ export type CreatePersonFields = {
 
 export type PersonFilters = z.infer<typeof personFilterSchema>;
 
+export type UpdatePersonDto = {
+  [K in keyof Person]?: Partial<Person[K]> | null;
+};
 export type PersonDto = Partial<Person>;
+
 export type CreatePersonDto = {
   person: PersonDto;
   isForSelf: boolean;

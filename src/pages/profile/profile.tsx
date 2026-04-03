@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { Button, Card, Descriptions, Divider, List, Popconfirm, Space, Tag } from 'antd';
+import { Button, Card, Col, Descriptions, Divider, List, Popconfirm, Row, Space, Tag } from 'antd';
 
 import { HomeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -9,6 +9,8 @@ import dayjs from 'dayjs';
 import { AlertMessage } from '../../components/alert';
 import { ChangePasswordModal } from '../../components/change-password-modal';
 import { CreatePersonModal } from '../../components/create-person-modal';
+import { DeletePersonButton } from '../../components/delete-person-button/delete-person-button';
+import { UpdatePersonModal } from '../../components/update-person-modal';
 import {
   ACCOUNT_MANAGEMENT,
   CANCEL,
@@ -20,17 +22,20 @@ import {
   EFFECT_IRREVERSIBLE,
   ERROR_CHANGING_PASSWORD,
   ERROR_CREATING_PERSON,
-  ERROR_DELETING_PROFILE,
+  ERROR_DELETION_PROFILE,
   ERROR_GETTING_MY_PERSONS,
+  ERROR_UPDATING_PERSON,
   GO_TO_MY_PERSON,
   LOG_OUT,
   LOG_OUT_ALL,
   LOGIN,
   MY_PERSON,
+  NO_CHANGING_DATA,
   NO_PERSONS,
   PASSWORD_SUCCESSFULLY_CHANGED,
   SUBMIT,
   TO_MAIN_PAGE,
+  UPDATE_PERSON,
 } from '../../constants/constants';
 import { PERSONS_PATH } from '../../constants/routes.constant';
 import { deleteProfileRequest, getCreatedPersonsRequest, logOutRequest } from '../../modules/fetch-api';
@@ -43,9 +48,12 @@ export const Profile = () => {
   const user = useAppSelector((state) => state.user.user);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
+  const [isCreatePersonModalOpen, setIsCreatePersonModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdatePersonModalOpen] = useState(false);
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
   const [createdPersons, setCreatedPersons] = useState<Person[]>([]);
+  const [myPerson, setMyPerson] = useState<Person | null>(null);
   const [isForSelf, setIsForSelf] = useState(false);
 
   const getCreatedPersons = async (): Promise<void> => {
@@ -86,13 +94,42 @@ export const Profile = () => {
     await getCreatedPersons();
 
     dispatch(hideAlert());
-    setIsPersonModalOpen(false);
+    setIsCreatePersonModalOpen(false);
+  };
+
+  const handleUpdatePerson = async (status: number) => {
+    console.log(status);
+    if (status !== 200) {
+      if (status === 304) {
+        dispatch(showAlert({ type: 'warning', message: NO_CHANGING_DATA }));
+        setIsUpdatePersonModalOpen(false);
+        return;
+      } else {
+        dispatch(showAlert({ type: 'warning', message: ERROR_UPDATING_PERSON }));
+        return;
+      }
+    }
+
+    await getCreatedPersons();
+
+    dispatch(hideAlert());
+    setIsUpdatePersonModalOpen(false);
+  };
+
+  const handleDeletePerson = async (status: number) => {
+    if (status !== 200) {
+      dispatch(showAlert({ type: 'warning', message: ERROR_DELETION_PROFILE }));
+      return;
+    }
+
+    await getCreatedPersons();
+    dispatch(hideAlert());
   };
 
   const handleDeleteProfile = async () => {
     const status = await deleteProfileRequest();
     if (status !== 200) {
-      dispatch(showAlert({ type: 'warning', message: ERROR_DELETING_PROFILE }));
+      dispatch(showAlert({ type: 'warning', message: ERROR_DELETION_PROFILE }));
       return;
     }
 
@@ -110,17 +147,25 @@ export const Profile = () => {
 
   const handleOpenCreatePersonForSelf = () => {
     setIsForSelf(true);
-    setIsPersonModalOpen(true);
+    setIsCreatePersonModalOpen(true);
   };
 
   const handleOpenCreatePerson = () => {
     setIsForSelf(false);
-    setIsPersonModalOpen(true);
+    setIsCreatePersonModalOpen(true);
+  };
+
+  const handleOpenUpdatePerson = () => {
+    setIsUpdatePersonModalOpen(true);
   };
 
   useEffect(() => {
     getCreatedPersons();
   }, [user?.id]);
+
+  useEffect(() => {
+    setMyPerson(createdPersons.find((field) => field.id === user?.personId) ?? null);
+  }, [createdPersons]);
 
   return (
     <div className={styles.page}>
@@ -135,8 +180,33 @@ export const Profile = () => {
               {user?.createdAt ? dayjs(user.createdAt).format('DD.MM.YYYY') : '—'}
             </Descriptions.Item>
             <Descriptions.Item label={MY_PERSON}>
-              {user?.personId ? (
-                <Link to={`/${PERSONS_PATH}/${user.personId}`}>{GO_TO_MY_PERSON}</Link>
+              {user?.personId && myPerson ? (
+                <Link
+                  to={`/${PERSONS_PATH}/${user.personId}`}
+                  className={styles.person_link}
+                  style={{ color: myPerson.gender ? '#1677ff' : '#eb2f96' }}
+                >
+                  <Col>{`${myPerson.lastName} ${myPerson.firstName} ${myPerson.middleName || ''}`}</Col>
+                  {GO_TO_MY_PERSON}
+                  {/*  */}
+                  <Col>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedPerson(myPerson);
+                        handleOpenUpdatePerson();
+                      }}
+                    >
+                      {UPDATE_PERSON}
+                    </Button>
+                  </Col>
+                  <Col>
+                    <span onClick={(e) => e.preventDefault()}>
+                      <DeletePersonButton onConfirm={handleDeletePerson} id={myPerson.id} />
+                    </span>
+                  </Col>
+                  {/*  */}
+                </Link>
               ) : (
                 <Button type='link' onClick={handleOpenCreatePersonForSelf}>
                   {CREATE_PERSON}
@@ -148,7 +218,7 @@ export const Profile = () => {
           <Divider orientation='horizontal'>{CREATED_PERSONS}</Divider>
 
           <List
-            dataSource={createdPersons}
+            dataSource={createdPersons.filter((p) => p.id !== user?.personId)}
             renderItem={(p: Person) => (
               <List.Item>
                 <Link
@@ -156,7 +226,27 @@ export const Profile = () => {
                   className={styles.person_link}
                   style={{ color: p.gender ? '#1677ff' : '#eb2f96' }}
                 >
-                  {`${p.lastName} ${p.firstName} ${p.middleName || ''}`}
+                  <Row gutter={[16, 0]}>
+                    <Col>{`${p.lastName} ${p.firstName} ${p.middleName || ''}`}</Col>
+                    {/*  */}
+                    <Col>
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedPerson(p);
+                          handleOpenUpdatePerson();
+                        }}
+                      >
+                        {UPDATE_PERSON}
+                      </Button>
+                    </Col>
+                    <Col>
+                      <span onClick={(e) => e.preventDefault()}>
+                        <DeletePersonButton onConfirm={handleDeletePerson} id={p.id} />
+                      </span>
+                    </Col>
+                    {/*  */}
+                  </Row>
                 </Link>
               </List.Item>
             )}
@@ -190,10 +280,16 @@ export const Profile = () => {
         </Card>
 
         <CreatePersonModal
-          open={isPersonModalOpen}
+          open={isCreatePersonModalOpen}
           isForSelf={isForSelf}
-          onCancel={() => setIsPersonModalOpen(false)}
+          onCancel={() => setIsCreatePersonModalOpen(false)}
           onSubmit={handleCreatePerson}
+        />
+        <UpdatePersonModal
+          open={isUpdateModalOpen}
+          onCancel={() => setIsUpdatePersonModalOpen(false)}
+          onSubmit={handleUpdatePerson}
+          person={selectedPerson}
         />
         <ChangePasswordModal
           open={isPassModalOpen}

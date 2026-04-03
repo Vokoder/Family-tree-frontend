@@ -2,6 +2,8 @@ import { Controller, type Control, type FieldErrors, type FieldValues, type Path
 
 import { Col, DatePicker, Divider, Form, Input, Modal, Row, Select } from 'antd';
 
+import dayjs from 'dayjs';
+
 import {
   ADDITIONALLY,
   BIOGRAPHY,
@@ -152,7 +154,19 @@ export const PersonModal = <T extends FieldValues>({
               <Controller
                 name={'dateOfBirthday' as Path<T>}
                 control={control}
-                render={({ field }) => <DatePicker {...field} style={{ width: '100%' }} format='DD.MM.YYYY' />}
+                // render={({ field }) => <DatePicker {...field} style={{ width: '100%' }} format='DD.MM.YYYY' />}
+                render={({ field: { value, onChange, onBlur, ref } }) => (
+                  <DatePicker
+                    ref={ref}
+                    onBlur={onBlur}
+                    style={{ width: '100%' }}
+                    format='DD.MM.YYYY'
+                    value={value ? dayjs(value as string | Date) : null}
+                    onChange={(date) => {
+                      onChange(date ? date.toISOString() : null);
+                    }}
+                  />
+                )}
               />
             </Form.Item>
           </Col>
@@ -180,7 +194,19 @@ export const PersonModal = <T extends FieldValues>({
               <Controller
                 name={'dateOfDeath' as Path<T>}
                 control={control}
-                render={({ field }) => <DatePicker {...field} style={{ width: '100%' }} format='DD.MM.YYYY' />}
+                // render={({ field }) => <DatePicker {...field} style={{ width: '100%' }} format='DD.MM.YYYY' />}
+                render={({ field: { value, onChange, onBlur, ref } }) => (
+                  <DatePicker
+                    ref={ref}
+                    onBlur={onBlur}
+                    style={{ width: '100%' }}
+                    format='DD.MM.YYYY'
+                    value={value ? dayjs(value as string | Date) : null}
+                    onChange={(date) => {
+                      onChange(date ? date.toISOString() : null);
+                    }}
+                  />
+                )}
               />
             </Form.Item>
           </Col>
@@ -254,6 +280,7 @@ export const PersonModal = <T extends FieldValues>({
               render={({ field }) => (
                 <Select
                   {...field}
+                  allowClear
                   placeholder={SELECT_RELATION_TYPE}
                   options={typesOfRelations.map((typeOfRelation) => {
                     return { value: typeOfRelation.id, label: typeOfRelation.id };
