@@ -18,16 +18,17 @@ import styles from './person-card.module.css';
 
 type PersonCardProps = {
   person: Person;
+  onPersonClick?: (person: Person) => void;
 };
 
-export const PersonCard = ({ person }: PersonCardProps) => {
+export const PersonCard = ({ person, onPersonClick }: PersonCardProps) => {
   const navigate = useNavigate();
   const formatDate = (date?: Date) => (date ? dayjs(date).format('DD.MM.YYYY') : null);
 
   return (
     <Card
       onClick={() => {
-        navigate(person.id);
+        onPersonClick ? onPersonClick(person) : navigate(person.id);
       }}
       hoverable
       className={[styles.card, person.gender ? styles.card_male : styles.card_female].join(' ')}

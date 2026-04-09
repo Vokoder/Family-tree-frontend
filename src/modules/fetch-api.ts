@@ -18,7 +18,7 @@ import { AXIOS_ERROR } from '../constants/errors.constant';
 import { SIGN_IN_PATH } from '../constants/routes.constant';
 import type { LicenseData } from '../types/license.type';
 import type { CreatePersonDto, Person, PersonFilters, UpdatePersonDto } from '../types/person.type';
-import type { Relation, RelationDto, RelationFilters } from '../types/relation.type';
+import type { PersonWithRelation, Relation, RelationDto, RelationFilters } from '../types/relation.type';
 import type { TypeOfRelation } from '../types/types-of-relations.type';
 import type { User } from '../types/user.type';
 import { HttpError } from './http-error';
@@ -177,6 +177,17 @@ export const getCreatedPersonsRequest = async (uid: string): Promise<Person[]> =
   return [];
 };
 
+export const getRelatedPersonsRequest = async (personId: string): Promise<PersonWithRelation[]> => {
+  try {
+    const persons = axiosGetRequest<PersonWithRelation[]>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}related/${personId}`);
+    return persons;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};
+
 export const createPersonRequest = async (personDto: CreatePersonDto): Promise<Person> => {
   const person = await axiosPostRequest<Person>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}`, personDto);
   return person;
@@ -218,7 +229,7 @@ export const createRelationRequest = async (relationDto: RelationDto): Promise<R
 
 export const updateRelationRequest = async (relationId: string, relationDto: RelationDto): Promise<Relation> => {
   const relation = await axiosPostRequest<Relation>(
-    `${SERVER_ADRESS}${SERVER_RELATION_ADRESS}/${relationId}`,
+    `${SERVER_ADRESS}${SERVER_RELATION_ADRESS}${relationId}`,
     relationDto,
   );
   return relation;
@@ -275,7 +286,7 @@ export const requestWithRefresh = async <T>(requestFunction: () => Promise<T>): 
   }
 };
 
-export const getRelationRequest = async (relationFilter: RelationFilters): Promise<Relation[]> => {
+export const getRelationsRequest = async (relationFilter: RelationFilters): Promise<Relation[]> => {
   try {
     return await axiosGetRequest<Relation[]>(`${SERVER_ADRESS}${SERVER_RELATION_ADRESS}`, relationFilter);
   } catch (error) {

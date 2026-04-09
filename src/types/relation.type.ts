@@ -1,6 +1,7 @@
 import type z from 'zod';
 
-import type { relationFilterSchema } from '../schemas/relation.schema.ts';
+import type { relationFiltersSchema } from '../schemas/relation.schema.ts';
+import type { Person } from './person.type.ts';
 
 export interface Relation {
   id: string;
@@ -10,7 +11,7 @@ export interface Relation {
   ownerId: string;
 }
 
-export type RelationFilters = z.infer<typeof relationFilterSchema>;
+export type RelationFilters = z.infer<typeof relationFiltersSchema>;
 export type RelationDto = Partial<Relation>;
 
 //  минимально необходимые поля для связи
@@ -18,3 +19,8 @@ export const relationRequiredFields: (keyof Relation)[] = ['ownerId', 'relationI
 
 //  поля поиска
 export const relationSearchFields: (keyof Relation)[] = ['id', 'relationId', 'sourcePersonId', 'targetPersonId'];
+
+export interface PersonWithRelation {
+  person: Person;
+  relation: Relation;
+}

@@ -4,7 +4,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import dayjs from 'dayjs';
 
-import { getRelationRequest, updatePersonRequest } from '../modules/fetch-api';
+import { getRelationsRequest, updatePersonRequest } from '../modules/fetch-api';
 import { personSchema } from '../schemas/pesron-validation-schema';
 import { useAppSelector } from '../store';
 import {
@@ -69,11 +69,11 @@ export const UpdatePersonModal = ({ open, onCancel, onSubmit, person }: UpdatePe
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [relation, setRelation] = useState<Relation | undefined>(undefined);
 
-  const fetchRelationData = async () => {
+  const fetchRelationFilters = async () => {
     setRelation(undefined);
 
     if (person && user?.personId && person.id !== user.personId) {
-      const relations = await getRelationRequest({
+      const relations = await getRelationsRequest({
         sourcePersonId: user.personId,
         targetPersonId: person.id,
       } as RelationFilters);
@@ -84,7 +84,7 @@ export const UpdatePersonModal = ({ open, onCancel, onSubmit, person }: UpdatePe
 
   useEffect(() => {
     if (open) {
-      fetchRelationData();
+      fetchRelationFilters();
     }
   }, [open]);
 

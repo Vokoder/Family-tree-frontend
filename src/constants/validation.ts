@@ -5,3 +5,4 @@ export const GET_PROFILE_FAILED = 'Не удалось получить данн
 export const REQUIRED = 'Обязательное поле';
 export const PASSWORDS_NOT_SAME = 'Пароли не совпадают';
 export const LICENSE_CONSENT_REQUIRED = 'Необходимо согласиться с условиями';
+export const CANNOT_BE_EMPTY = 'Поле не может быть пустым';

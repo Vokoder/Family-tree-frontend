@@ -79,6 +79,10 @@ export const ERROR_GETTING_MY_PERSONS = 'Ошибка при получении 
 export const ACCOUNT_MANAGEMENT = 'Управление аккаунтом';
 export const NO_CHANGING_DATA = 'Нет данных для изменений';
 
+//  relations
+export const ERROR_CREATING_RELATION = 'Обишка при создании родственной связи';
+export const ERROR_UPDATING_RELATION = 'Обишка при обновлении родственной связи';
+
 //  sections
 export const MAIN_INFORMATION = 'Основная информация';
 export const BIRTH_AND_DEATH = 'Рождение и смерть';

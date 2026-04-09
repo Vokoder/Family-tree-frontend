@@ -17,44 +17,8 @@
   margin: 0px;
 }
 
-.content_layout {
-  height: calc(100vh - 64px);
-  flex-direction: row;
-}
-
-.sider {
-  padding: 24px;
-  overflow: auto;
-  height: 100%;
-  position: sticky;
-  inset-inline-start: 0;
-  top: 0px;
-  scrollbar-width: thin;
-}
-
-.form {
-  padding-bottom: 3vh;
-}
-
-.content {
-  padding: 3vh;
-  overflow-y: auto;
-  height: 100%;
-}
-
-.empty {
-  text-align: center;
-  margin-top: 50px;
-  color: #999;
-}
-
 @media (max-width: 767px) {
   .title {
     display: none !important;
-  }
-
-  .content_layout {
-    height: auto !important;
-    flex-direction: column !important;
   }
 }

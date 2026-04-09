@@ -9,8 +9,10 @@ import dayjs from 'dayjs';
 import { AlertMessage } from '../../components/alert';
 import { ChangePasswordModal } from '../../components/change-password-modal';
 import { CreatePersonModal } from '../../components/create-person-modal';
+import { CreateRelationModal } from '../../components/create-relation-modal';
 import { DeletePersonButton } from '../../components/delete-person-button/delete-person-button';
 import { UpdatePersonModal } from '../../components/update-person-modal';
+import { UpdateRelationModal } from '../../components/update-relation-modal';
 import {
   ACCOUNT_MANAGEMENT,
   CANCEL,
@@ -22,9 +24,11 @@ import {
   EFFECT_IRREVERSIBLE,
   ERROR_CHANGING_PASSWORD,
   ERROR_CREATING_PERSON,
+  ERROR_CREATING_RELATION,
   ERROR_DELETION_PROFILE,
   ERROR_GETTING_MY_PERSONS,
   ERROR_UPDATING_PERSON,
+  ERROR_UPDATING_RELATION,
   GO_TO_MY_PERSON,
   LOG_OUT,
   LOG_OUT_ALL,
@@ -52,6 +56,8 @@ export const Profile = () => {
   const [isCreatePersonModalOpen, setIsCreatePersonModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdatePersonModalOpen] = useState(false);
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
+  const [isUpdateRelationModalOpen, setIsUpdateRelationOpen] = useState(false);
+  const [isCreateRelationModalOpen, setIsCreateRelationModalOpen] = useState(false);
   const [createdPersons, setCreatedPersons] = useState<Person[]>([]);
   const [myPerson, setMyPerson] = useState<Person | null>(null);
   const [isForSelf, setIsForSelf] = useState(false);
@@ -98,7 +104,6 @@ export const Profile = () => {
   };
 
   const handleUpdatePerson = async (status: number) => {
-    console.log(status);
     if (status !== 200) {
       if (status === 304) {
         dispatch(showAlert({ type: 'warning', message: NO_CHANGING_DATA }));
@@ -159,6 +164,38 @@ export const Profile = () => {
     setIsUpdatePersonModalOpen(true);
   };
 
+  const handleOpenUpdateRelation = () => {
+    setIsUpdateRelationOpen(true);
+  };
+
+  const handleOpenCreateRelation = () => {
+    setIsCreateRelationModalOpen(true);
+  };
+
+  const handleUpdateRelation = async (status: number) => {
+    if (status !== 200) {
+      dispatch(showAlert({ type: 'warning', message: ERROR_UPDATING_RELATION }));
+      return;
+    }
+
+    await getCreatedPersons();
+
+    dispatch(hideAlert());
+    setIsUpdateRelationOpen(false);
+  };
+
+  const handleCreateRelation = async (status: number) => {
+    if (status !== 200) {
+      dispatch(showAlert({ type: 'warning', message: ERROR_CREATING_RELATION }));
+      return;
+    }
+
+    await getCreatedPersons();
+
+    dispatch(hideAlert());
+    setIsCreateRelationModalOpen(false);
+  };
+
   useEffect(() => {
     getCreatedPersons();
   }, [user?.id]);
@@ -200,6 +237,28 @@ export const Profile = () => {
                       {UPDATE_PERSON}
                     </Button>
                   </Col>
+
+                  <Col>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedPerson(myPerson);
+                        handleOpenUpdateRelation();
+                      }}
+                    >
+                      Обновить связи
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedPerson(myPerson);
+                        handleOpenCreateRelation();
+                      }}
+                    >
+                      Создать связи
+                    </Button>
+                  </Col>
+
                   <Col>
                     <span onClick={(e) => e.preventDefault()}>
                       <DeletePersonButton onConfirm={handleDeletePerson} id={myPerson.id} />
@@ -295,6 +354,18 @@ export const Profile = () => {
           open={isPassModalOpen}
           onCancel={() => setIsPassModalOpen(false)}
           onSubmit={handleChangePassword}
+        />
+        <CreateRelationModal
+          open={isCreateRelationModalOpen}
+          onCancel={() => setIsCreateRelationModalOpen(false)}
+          onSubmit={handleCreateRelation}
+          sourcePerson={selectedPerson}
+        />
+        <UpdateRelationModal
+          open={isUpdateRelationModalOpen}
+          onCancel={() => setIsUpdateRelationOpen(false)}
+          onSubmit={handleUpdateRelation}
+          sourcePerson={selectedPerson}
         />
       </div>
 
