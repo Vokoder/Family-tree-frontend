@@ -232,7 +232,6 @@ export const Profile = () => {
                     style={{ color: myPerson.gender ? '#1677ff' : '#eb2f96' }}
                   >
                     <Col>{`${myPerson.lastName} ${myPerson.firstName} ${myPerson.middleName || ''}`}</Col>
-                    {GO_TO_MY_PERSON}
                     <Col>
                       <Button
                         onClick={(e) => {

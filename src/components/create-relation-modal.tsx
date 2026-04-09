@@ -2,7 +2,12 @@ import { useState } from 'react';
 
 import { Modal, message } from 'antd';
 
-import { CREATE_RELATION_TITLE, ERROR_CREATING_RELATION, RELATION_CREATED } from '../constants/constants';
+import {
+  CREATE_RELATION_TITLE,
+  ERROR_CREATING_RELATION,
+  RELATION_CREATED,
+  SOURCE_AND_TARGET_MATCH,
+} from '../constants/constants';
 import { createRelationRequest } from '../modules/fetch-api';
 import type { RelationSchemaFields } from '../schemas/relation.schema';
 import type { Person } from '../types/person.type';
@@ -21,6 +26,11 @@ export const CreateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
   if (!sourcePerson) return null;
 
   const handleFormSubmit = async (data: RelationSchemaFields) => {
+    if (data.sourcePersonId === data.targetPersonId) {
+      message.error(SOURCE_AND_TARGET_MATCH);
+      return;
+    }
+
     setIsLoading(true);
     try {
       console.log(data);

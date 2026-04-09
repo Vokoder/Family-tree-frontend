@@ -104,6 +104,8 @@ export const RELATIONS = 'Связи';
 export const RELATION_TYPE = 'Вид связи';
 export const FROM_WHOM = 'От кого';
 export const TO_WHOM = 'К кому';
+export const SOURCE_AND_TARGET_MATCH = 'Источник и получатель связи должны быть разными людьми';
+export const RELATION_ERROR = 'Ошибка';
 
 //  sections
 export const MAIN_INFORMATION = 'Основная информация';

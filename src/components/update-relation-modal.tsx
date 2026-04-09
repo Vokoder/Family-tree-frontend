@@ -10,6 +10,7 @@ import {
   ERROR_UPDATING_RELATION,
   NO_CHANGES,
   RELATION_DELETED,
+  RELATION_ERROR,
   RELATION_TYPE,
   RELATION_UPDATED,
   RELATIONS,
@@ -17,6 +18,7 @@ import {
 } from '../constants/constants';
 import { deleteRelationRequest, getRelatedPersonsRequest, updateRelationRequest } from '../modules/fetch-api';
 import type { RelationSchemaFields } from '../schemas/relation.schema';
+import { useAppSelector } from '../store';
 import type { Person } from '../types/person.type';
 import type { PersonWithRelation } from '../types/relation.type';
 import { compareRelations } from '../utils/compare-relations.utils';
@@ -34,6 +36,8 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
   const [editingRelation, setEditingRelation] = useState<PersonWithRelation | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEventLoading, setIsEventLoading] = useState(false);
+
+  const typesOfRelations = useAppSelector((store) => store.typesOfRelations.typesOfRelations);
 
   const fetchRelated = async () => {
     if (!sourcePerson) return;
@@ -81,16 +85,16 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
 
   const handleDelete = async (id: string) => {
     setIsEventLoading(true);
-    try {
-      await deleteRelationRequest(id);
-      message.success(RELATION_DELETED);
-      onSubmit(200);
-    } catch (e) {
+    const status = await deleteRelationRequest(id);
+
+    if (status !== 200) {
       message.error(ERROR_DELETING_RELATION);
       onSubmit(500);
-    } finally {
-      setIsEventLoading(false);
+    } else {
+      message.success(RELATION_DELETED);
+      onSubmit(200);
     }
+    setIsEventLoading(false);
   };
 
   return (
@@ -140,7 +144,12 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
                 description={
                   <Space>
                     <Typography.Text type='secondary'>{RELATION_TYPE}:</Typography.Text>
-                    <Typography.Text strong>{item.relation.relationId}</Typography.Text>
+                    <Typography.Text strong>
+                      {item.relation.sourcePersonId === sourcePerson.id
+                        ? item.relation.relationId
+                        : (typesOfRelations.find((type) => type.id === item.relation.relationId)?.invertedPairId ??
+                          RELATION_ERROR)}
+                    </Typography.Text>
                   </Space>
                 }
               />
