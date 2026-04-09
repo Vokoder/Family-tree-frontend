@@ -6,8 +6,8 @@ interface PersonSelectProps {
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
-  allPersons: Person[]; // Список ваших созданных персон
-  onSearch: (name: string) => void; // Функция поиска по API
+  allPersons: Person[];
+  onSearch: (name: string) => void;
 }
 
 export const PersonSelect = ({ value, onChange, placeholder, allPersons, onSearch }: PersonSelectProps) => {

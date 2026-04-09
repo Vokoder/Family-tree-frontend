@@ -4,6 +4,10 @@ import { Button, Result, Skeleton, Spin } from 'antd';
 
 import { LoadingOutlined } from '@ant-design/icons';
 
+import { DATA_NOT_FOUND, RETRY } from '../../constants/constants';
+import { LOADING_ERROR } from '../../constants/errors.constant';
+import styles from './loading-wrapper.module.css';
+
 interface LoadingWrapperProps {
   isLoading: boolean;
   isEmpty?: boolean;
@@ -13,7 +17,7 @@ interface LoadingWrapperProps {
   skeletonRows?: number;
 }
 
-const antIcon = <LoadingOutlined style={{ fontSize: 32 }} spin />;
+const antIcon = <LoadingOutlined className={styles.loading_icon} spin />;
 
 export const LoadingWrapper = ({
   isLoading,
@@ -27,12 +31,12 @@ export const LoadingWrapper = ({
     return (
       <Result
         status='error'
-        title='Ошибка загрузки'
+        title={LOADING_ERROR}
         subTitle={error}
         extra={
           onRetry && (
             <Button onClick={onRetry} type='primary'>
-              Повторить
+              {RETRY}
             </Button>
           )
         }
@@ -40,16 +44,14 @@ export const LoadingWrapper = ({
     );
   }
 
-  // 2. Состояние пустых данных (когда загрузка завершена, но данных нет)
   if (!isLoading && isEmpty) {
-    return <Result status='warning' title='Данные не найдены' />;
+    return <Result status='warning' title={DATA_NOT_FOUND} />;
   }
 
-  // 3. Состояние загрузки (Spin + Skeleton)
   return (
     <Spin spinning={isLoading} indicator={antIcon}>
       {isLoading ? (
-        <div style={{ padding: 20 }}>
+        <div className={styles.sceleton_container}>
           <Skeleton active paragraph={{ rows: skeletonRows }} title />
         </div>
       ) : (

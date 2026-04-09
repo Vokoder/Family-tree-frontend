@@ -7,10 +7,16 @@ export const SEARCH = 'Найти';
 export const RESET = 'Сбросить';
 export const SUBMIT = 'Отправить';
 export const CANCEL = 'Отменить';
+export const SAVE = 'Сохранить';
 export const BACK = 'Назад';
 export const TO_MAIN_PAGE = 'На главную страницу';
 export const EFFECT_IRREVERSIBLE = 'Это действие необратимо';
 export const NOT_SPECIFIED = 'Не указано';
+export const NO_CHANGES = 'Нет изменений';
+export const DELETE = 'Удалить';
+export const EDIT = 'Изменить';
+export const RETRY = 'Повторить';
+export const DATA_NOT_FOUND = 'Данные не найдены';
 
 //  auth
 export const LOG_OUT = 'Выйти из аккуанта';
@@ -44,6 +50,7 @@ export const CREATE_PERSON = 'Создать анкету';
 export const UPDATE_MY_PERSON = 'Обновить мою анкету';
 export const UPDATE_PERSON = 'Обновить анкету';
 export const DELETE_PERSON = 'Удалить анкету';
+export const SEARCH_PERSON_TITLE = 'Поиск анкеты';
 
 //  go to profile button
 export const LOG_IN = 'Войти';
@@ -78,10 +85,25 @@ export const CHANGE_PASSWORD = 'Изменить пароль';
 export const ERROR_GETTING_MY_PERSONS = 'Ошибка при получении персон';
 export const ACCOUNT_MANAGEMENT = 'Управление аккаунтом';
 export const NO_CHANGING_DATA = 'Нет данных для изменений';
+export const MY_PROFILE_TITLE = 'Мой профиль';
+export const PRESS_TO_SEARCH_PERSON = 'Нажмите, чтобы выбрать человека';
 
 //  relations
+export const CREATE_RELATION_TITLE = 'Создание новой родственной связи';
+export const UPDATE_RELATION_TITLE = 'Обновление родственной связи';
+export const CREATE_RELATION = 'Создать связи';
+export const UPDATE_RELATION = 'Обновить связи';
+export const DELETE_RELATION_TITLE = 'Удалить связь?';
 export const ERROR_CREATING_RELATION = 'Обишка при создании родственной связи';
 export const ERROR_UPDATING_RELATION = 'Обишка при обновлении родственной связи';
+export const ERROR_DELETING_RELATION = 'Обишка при удалении родственной связи';
+export const RELATION_CREATED = 'Родственная связь успешно создана';
+export const RELATION_UPDATED = 'Родственная связь успешно обновлена';
+export const RELATION_DELETED = 'Родственная связь успешно удалена';
+export const RELATIONS = 'Связи';
+export const RELATION_TYPE = 'Вид связи';
+export const FROM_WHOM = 'От кого';
+export const TO_WHOM = 'К кому';
 
 //  sections
 export const MAIN_INFORMATION = 'Основная информация';

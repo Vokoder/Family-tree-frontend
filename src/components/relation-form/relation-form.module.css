@@ -1,0 +1,12 @@
+.buttons {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.search_icon {
+  color: #bfbfbf;
+}

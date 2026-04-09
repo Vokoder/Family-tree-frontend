@@ -154,7 +154,6 @@ export const PersonModal = <T extends FieldValues>({
               <Controller
                 name={'dateOfBirthday' as Path<T>}
                 control={control}
-                // render={({ field }) => <DatePicker {...field} style={{ width: '100%' }} format='DD.MM.YYYY' />}
                 render={({ field: { value, onChange, onBlur, ref } }) => (
                   <DatePicker
                     ref={ref}
@@ -194,7 +193,6 @@ export const PersonModal = <T extends FieldValues>({
               <Controller
                 name={'dateOfDeath' as Path<T>}
                 control={control}
-                // render={({ field }) => <DatePicker {...field} style={{ width: '100%' }} format='DD.MM.YYYY' />}
                 render={({ field: { value, onChange, onBlur, ref } }) => (
                   <DatePicker
                     ref={ref}

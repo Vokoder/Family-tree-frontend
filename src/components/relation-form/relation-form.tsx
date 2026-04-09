@@ -6,20 +6,33 @@ import { Form, Select, Button, Space, Input, Modal } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { relationSchema, type RelationSchemaFields } from '../schemas/relation.schema';
-import { useAppSelector } from '../store';
-import type { Person } from '../types/person.type';
-import type { PersonWithRelation } from '../types/relation.type';
-import { SearchPersons } from './search-persons/search-persons';
+import {
+  CANCEL,
+  CREATE_RELATION,
+  FROM_WHOM,
+  PRESS_TO_SEARCH_PERSON,
+  RELATION_TYPE,
+  SAVE,
+  SEARCH_PERSON_TITLE,
+  SELECT_RELATION_TYPE,
+  TO_WHOM,
+} from '../../constants/constants';
+import { relationSchema, type RelationSchemaFields } from '../../schemas/relation.schema';
+import { useAppSelector } from '../../store';
+import type { Person } from '../../types/person.type';
+import type { PersonWithRelation } from '../../types/relation.type';
+import { SearchPersons } from '../search-persons/search-persons';
+import styles from './relation-form.module.css';
 
 interface RelationFormProps {
   sourcePerson: Person;
   relatedData?: PersonWithRelation;
   onSubmit: (relation: RelationSchemaFields) => void;
   onCancel: () => void;
+  isLoading: boolean;
 }
 
-export const RelationForm = ({ sourcePerson, relatedData, onSubmit, onCancel }: RelationFormProps) => {
+export const RelationForm = ({ sourcePerson, relatedData, onSubmit, onCancel, isLoading }: RelationFormProps) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [targetPerson, setTargetPerson] = useState<Person | null>(null);
   const typesOfRelations = useAppSelector((state) => state.typesOfRelations.typesOfRelations);
@@ -47,19 +60,19 @@ export const RelationForm = ({ sourcePerson, relatedData, onSubmit, onCancel }: 
   return (
     <>
       <Form layout='vertical' onFinish={handleSubmit(onSubmit)}>
-        <Form.Item label='От кого' help={errors.sourcePersonId?.message}>
+        <Form.Item label={FROM_WHOM} help={errors.sourcePersonId?.message}>
           <Input value={`${sourcePerson.lastName} ${sourcePerson.firstName}`} disabled />
         </Form.Item>
 
-        <Form.Item label='Тип связи' required help={errors.relationId?.message}>
+        <Form.Item label={RELATION_TYPE} required help={errors.relationId?.message}>
           <Controller
             name='relationId'
             control={control}
             render={({ field }) => (
-              <Select {...field} placeholder='Выберите тип связи'>
+              <Select {...field} placeholder={SELECT_RELATION_TYPE}>
                 {typesOfRelations.map((type) => (
                   <Select.Option key={type.id} value={type.id}>
-                    {type.id} {/* Здесь будет имя типа */}
+                    {type.id}
                   </Select.Option>
                 ))}
               </Select>
@@ -67,34 +80,34 @@ export const RelationForm = ({ sourcePerson, relatedData, onSubmit, onCancel }: 
           />
         </Form.Item>
 
-        <Form.Item label='К кому' required help={errors.targetPersonId?.message}>
+        <Form.Item label={TO_WHOM} required help={errors.targetPersonId?.message}>
           {relatedData ? (
             <Input value={`${relatedData.person.lastName} ${relatedData.person.firstName}`} disabled />
           ) : (
-            <Space.Compact style={{ width: '100%' }}>
+            <div onClick={() => setIsSearchOpen(true)} className={styles.button}>
               <Input
-                placeholder='Выберите человека через поиск'
-                // value={selectedTargetId ? `Выбран ID: ${selectedTargetId}` : ''}
-                value={targetPerson ? `${targetPerson.firstName} ${targetPerson.lastName} ${targetPerson.id}` : ''}
+                placeholder={`${PRESS_TO_SEARCH_PERSON}...`}
+                value={
+                  targetPerson ? `${targetPerson.lastName} ${targetPerson.firstName} (ID: ${targetPerson.id})` : ''
+                }
                 readOnly
+                disabled={!!relatedData}
+                suffix={<SearchOutlined className={styles.search_icon} />}
               />
-              <Button icon={<SearchOutlined />} onClick={() => setIsSearchOpen(true)}>
-                Поиск
-              </Button>
-            </Space.Compact>
+            </div>
           )}
         </Form.Item>
 
-        <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-          <Button onClick={onCancel}>Отмена</Button>
-          <Button type='primary' htmlType='submit'>
-            {relatedData ? 'Сохранить изменения' : 'Создать связь'}
+        <Space className={styles.buttons}>
+          <Button onClick={onCancel}>{CANCEL}</Button>
+          <Button type='primary' htmlType='submit' loading={isLoading}>
+            {relatedData ? SAVE : CREATE_RELATION}
           </Button>
         </Space>
       </Form>
 
       <Modal
-        title='Поиск персоны'
+        title={SEARCH_PERSON_TITLE}
         open={isSearchOpen}
         onCancel={() => setIsSearchOpen(false)}
         width='80vw'

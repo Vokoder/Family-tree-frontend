@@ -11,6 +11,7 @@ import { ChangePasswordModal } from '../../components/change-password-modal';
 import { CreatePersonModal } from '../../components/create-person-modal';
 import { CreateRelationModal } from '../../components/create-relation-modal';
 import { DeletePersonButton } from '../../components/delete-person-button/delete-person-button';
+import { LoadingWrapper } from '../../components/loading-wrapper/loading-wrapper';
 import { UpdatePersonModal } from '../../components/update-person-modal';
 import { UpdateRelationModal } from '../../components/update-relation-modal';
 import {
@@ -18,6 +19,7 @@ import {
   CANCEL,
   CHANGE_PASSWORD,
   CREATE_PERSON,
+  CREATE_RELATION,
   CREATED_PERSONS,
   DATE_OF_CREATION,
   DELETE_ACCOUNT,
@@ -34,12 +36,14 @@ import {
   LOG_OUT_ALL,
   LOGIN,
   MY_PERSON,
+  MY_PROFILE_TITLE,
   NO_CHANGING_DATA,
   NO_PERSONS,
   PASSWORD_SUCCESSFULLY_CHANGED,
   SUBMIT,
   TO_MAIN_PAGE,
   UPDATE_PERSON,
+  UPDATE_RELATION,
 } from '../../constants/constants';
 import { PERSONS_PATH } from '../../constants/routes.constant';
 import { deleteProfileRequest, getCreatedPersonsRequest, logOutRequest } from '../../modules/fetch-api';
@@ -61,8 +65,10 @@ export const Profile = () => {
   const [createdPersons, setCreatedPersons] = useState<Person[]>([]);
   const [myPerson, setMyPerson] = useState<Person | null>(null);
   const [isForSelf, setIsForSelf] = useState(false);
+  const [isPersonsLoading, setIsPersonsLoading] = useState(false);
 
   const getCreatedPersons = async (): Promise<void> => {
+    setIsPersonsLoading(true);
     if (!user?.id) {
       dispatch(showAlert({ type: 'error', message: `${ERROR_GETTING_MY_PERSONS}. Отсутствует user.id` }));
       return;
@@ -70,6 +76,7 @@ export const Profile = () => {
 
     const persons = await getCreatedPersonsRequest(user.id);
     setCreatedPersons(persons);
+    setIsPersonsLoading(false);
   };
 
   const logOut = async (all: boolean) => {
@@ -210,107 +217,125 @@ export const Profile = () => {
         <Button icon={<HomeOutlined />} onClick={() => navigate(`/${PERSONS_PATH}`)} className={styles.backButton}>
           {TO_MAIN_PAGE}
         </Button>
-        <Card title='Мой профиль' extra={<Tag color='blue'>{user?.roleId}</Tag>}>
+        <Card title={MY_PROFILE_TITLE} extra={<Tag color='blue'>{user?.roleId}</Tag>}>
           <Descriptions column={1} bordered size='small'>
             <Descriptions.Item label={LOGIN}>{user?.login}</Descriptions.Item>
             <Descriptions.Item label={DATE_OF_CREATION}>
               {user?.createdAt ? dayjs(user.createdAt).format('DD.MM.YYYY') : '—'}
             </Descriptions.Item>
             <Descriptions.Item label={MY_PERSON}>
-              {user?.personId && myPerson ? (
-                <Link
-                  to={`/${PERSONS_PATH}/${user.personId}`}
-                  className={styles.person_link}
-                  style={{ color: myPerson.gender ? '#1677ff' : '#eb2f96' }}
-                >
-                  <Col>{`${myPerson.lastName} ${myPerson.firstName} ${myPerson.middleName || ''}`}</Col>
-                  {GO_TO_MY_PERSON}
-                  {/*  */}
-                  <Col>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedPerson(myPerson);
-                        handleOpenUpdatePerson();
-                      }}
-                    >
-                      {UPDATE_PERSON}
-                    </Button>
-                  </Col>
-
-                  <Col>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedPerson(myPerson);
-                        handleOpenUpdateRelation();
-                      }}
-                    >
-                      Обновить связи
-                    </Button>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedPerson(myPerson);
-                        handleOpenCreateRelation();
-                      }}
-                    >
-                      Создать связи
-                    </Button>
-                  </Col>
-
-                  <Col>
-                    <span onClick={(e) => e.preventDefault()}>
-                      <DeletePersonButton onConfirm={handleDeletePerson} id={myPerson.id} />
-                    </span>
-                  </Col>
-                  {/*  */}
-                </Link>
-              ) : (
-                <Button type='link' onClick={handleOpenCreatePersonForSelf}>
-                  {CREATE_PERSON}
-                </Button>
-              )}
-            </Descriptions.Item>
-          </Descriptions>
-
-          <Divider orientation='horizontal'>{CREATED_PERSONS}</Divider>
-
-          <List
-            dataSource={createdPersons.filter((p) => p.id !== user?.personId)}
-            renderItem={(p: Person) => (
-              <List.Item>
-                <Link
-                  to={`/${PERSONS_PATH}/${p.id}`}
-                  className={styles.person_link}
-                  style={{ color: p.gender ? '#1677ff' : '#eb2f96' }}
-                >
-                  <Row gutter={[16, 0]}>
-                    <Col>{`${p.lastName} ${p.firstName} ${p.middleName || ''}`}</Col>
-                    {/*  */}
+              <LoadingWrapper isLoading={isPersonsLoading}>
+                {user?.personId && myPerson ? (
+                  <Link
+                    to={`/${PERSONS_PATH}/${user.personId}`}
+                    className={styles.person_link}
+                    style={{ color: myPerson.gender ? '#1677ff' : '#eb2f96' }}
+                  >
+                    <Col>{`${myPerson.lastName} ${myPerson.firstName} ${myPerson.middleName || ''}`}</Col>
+                    {GO_TO_MY_PERSON}
                     <Col>
                       <Button
                         onClick={(e) => {
                           e.preventDefault();
-                          setSelectedPerson(p);
+                          setSelectedPerson(myPerson);
                           handleOpenUpdatePerson();
                         }}
                       >
                         {UPDATE_PERSON}
                       </Button>
                     </Col>
+
+                    <Col>
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedPerson(myPerson);
+                          handleOpenUpdateRelation();
+                        }}
+                      >
+                        {UPDATE_RELATION}
+                      </Button>
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedPerson(myPerson);
+                          handleOpenCreateRelation();
+                        }}
+                      >
+                        {CREATE_RELATION}
+                      </Button>
+                    </Col>
+
                     <Col>
                       <span onClick={(e) => e.preventDefault()}>
-                        <DeletePersonButton onConfirm={handleDeletePerson} id={p.id} />
+                        <DeletePersonButton onConfirm={handleDeletePerson} id={myPerson.id} />
                       </span>
                     </Col>
-                    {/*  */}
-                  </Row>
-                </Link>
-              </List.Item>
-            )}
-            locale={{ emptyText: NO_PERSONS }}
-          />
+                  </Link>
+                ) : (
+                  <Button type='link' onClick={handleOpenCreatePersonForSelf}>
+                    {CREATE_PERSON}
+                  </Button>
+                )}
+              </LoadingWrapper>
+            </Descriptions.Item>
+          </Descriptions>
+
+          <Divider orientation='horizontal'>{CREATED_PERSONS}</Divider>
+
+          <LoadingWrapper isLoading={isPersonsLoading}>
+            <List
+              dataSource={createdPersons.filter((p) => p.id !== user?.personId)}
+              renderItem={(p: Person) => (
+                <List.Item>
+                  <Link
+                    to={`/${PERSONS_PATH}/${p.id}`}
+                    className={styles.person_link}
+                    style={{ color: p.gender ? '#1677ff' : '#eb2f96' }}
+                  >
+                    <Row gutter={[16, 0]}>
+                      <Col>{`${p.lastName} ${p.firstName} ${p.middleName || ''}`}</Col>
+                      <Col>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedPerson(p);
+                            handleOpenUpdatePerson();
+                          }}
+                        >
+                          {UPDATE_PERSON}
+                        </Button>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedPerson(p);
+                            handleOpenUpdateRelation();
+                          }}
+                        >
+                          {UPDATE_RELATION}
+                        </Button>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedPerson(p);
+                            handleOpenCreateRelation();
+                          }}
+                        >
+                          {CREATE_RELATION}
+                        </Button>
+                      </Col>
+                      <Col>
+                        <span onClick={(e) => e.preventDefault()}>
+                          <DeletePersonButton onConfirm={handleDeletePerson} id={p.id} />
+                        </span>
+                      </Col>
+                    </Row>
+                  </Link>
+                </List.Item>
+              )}
+              locale={{ emptyText: NO_PERSONS }}
+            />
+          </LoadingWrapper>
           <div className={styles.new_person_button}>
             <Button type='default' onClick={handleOpenCreatePerson}>
               {CREATE_PERSON}
