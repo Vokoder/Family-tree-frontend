@@ -1,7 +1,5 @@
 export const WEBSITE_TITLE = 'Семейное дерево';
 
-export const NOTHING_FOUND = 'Ничего не найдено';
-
 export const FILTERS = 'Фильтры';
 export const SEARCH = 'Найти';
 export const RESET = 'Сбросить';
@@ -16,7 +14,7 @@ export const NO_CHANGES = 'Нет изменений';
 export const DELETE = 'Удалить';
 export const EDIT = 'Изменить';
 export const RETRY = 'Повторить';
-export const DATA_NOT_FOUND = 'Данные не найдены';
+export const DATA_NOT_FOUND = 'Ничего не найдено';
 
 //  auth
 export const LOG_OUT = 'Выйти из аккуанта';

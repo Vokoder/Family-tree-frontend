@@ -45,7 +45,7 @@ export const LoadingWrapper = ({
   }
 
   if (!isLoading && isEmpty) {
-    return <Result status='warning' title={DATA_NOT_FOUND} />;
+    return <Result status='404' title={DATA_NOT_FOUND} />;
   }
 
   return (

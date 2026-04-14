@@ -19,7 +19,6 @@ import {
   LAST_NAME,
   MALE,
   MIDDLE_NAME,
-  NOTHING_FOUND,
   PLACE_OF_BIRTHDAY,
   PLACE_OF_DEATH,
   RESET,
@@ -38,6 +37,7 @@ import { getPersonsRequest } from '../../modules/fetch-api';
 import { personFilterSchema } from '../../schemas/person.schema';
 import type { Person, PersonFilters } from '../../types/person.type';
 import { removeEmptyOrUndefined } from '../../utils/remove-undefined.utils';
+import { LoadingWrapper } from '../loading-wrapper/loading-wrapper';
 import { PersonCard } from '../person-card/person-card';
 import styles from './search-persons.module.css';
 
@@ -50,13 +50,17 @@ interface SearchPersonsParams {
 
 export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
   const [searchResults, setSearchResults] = useState<Person[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getSearchedPersons = async (filter?: PersonFilters): Promise<void> => {
     try {
+      setIsLoading(true);
       const persons = await getPersonsRequest(filter);
       setSearchResults(persons);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -194,13 +198,11 @@ export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
       <Content className={styles.content}>
         <Row gutter={[16, 16]} justify='center'>
           <Col xs={24}>
-            {searchResults.length > 0 ? (
-              searchResults.map((person) => (
+            <LoadingWrapper isLoading={isLoading} isEmpty={!searchResults.length}>
+              {searchResults.map((person) => (
                 <PersonCard key={person.id} person={person} onPersonClick={onPersonClick} />
-              ))
-            ) : (
-              <div className={styles.empty}>{NOTHING_FOUND}</div>
-            )}
+              ))}
+            </LoadingWrapper>
           </Col>
         </Row>
       </Content>
