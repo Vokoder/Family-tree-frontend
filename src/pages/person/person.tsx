@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button, Card, Descriptions, Empty, Popconfirm, Space, Tag, Typography } from 'antd';
+import { Button, Card, Descriptions, Empty, Space, Tag, Typography } from 'antd';
 
 import { ArrowLeftOutlined, ManOutlined, WomanOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -22,6 +22,7 @@ import {
   RELATED_LOCATIONS,
 } from '../../constants/constants';
 import { USER_ADMIN_ROLE } from '../../constants/env';
+import { TREE_PATH } from '../../constants/routes.constant';
 import { getPersonRequest } from '../../modules/fetch-api';
 import { useAppSelector } from '../../store';
 import type { Person as PersonType } from '../../types/person.type';
@@ -29,14 +30,19 @@ import styles from './person.module.css';
 
 export const Person = () => {
   const { Title, Paragraph, Text } = Typography;
-  const { '*': uid } = useParams();
+  const { '*': personId } = useParams();
   const navigate = useNavigate();
   const [person, setPerson] = useState<PersonType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const user = useAppSelector((store) => store.user.user);
 
-  if ((!person && !loading) || !uid) {
+  useEffect(() => {
+    setLoading(true);
+    getPerson();
+  }, [personId]);
+
+  if ((!person && !loading) || !personId) {
     return (
       <div style={{ padding: '24px' }}>
         <Button onClick={() => navigate(-1)} icon={<ArrowLeftOutlined />}>
@@ -49,15 +55,10 @@ export const Person = () => {
 
   const getPerson = async (): Promise<void> => {
     setLoading(true);
-    const person = await getPersonRequest(uid);
+    const person = await getPersonRequest(personId);
     setPerson(person);
     setLoading(false);
   };
-
-  useEffect(() => {
-    setLoading(true);
-    getPerson();
-  }, [uid]);
 
   const formatDate = (date?: Date) => (date ? dayjs(date).format('DD.MM.YYYY') : '-');
 
@@ -128,6 +129,7 @@ export const Person = () => {
             </div>
           )}
 
+          <Button onClick={() => navigate(`/${TREE_PATH}/${person?.id}`)}>Построить дерево</Button>
           {person?.id && (person?.ownerId === user?.id || user?.roleId === USER_ADMIN_ROLE) && (
             <>
               <DeletePersonButton id={person.id} />

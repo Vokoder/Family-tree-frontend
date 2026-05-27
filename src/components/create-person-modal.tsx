@@ -7,13 +7,13 @@ import { createPersonRequest } from '../modules/fetch-api';
 import { personSchema } from '../schemas/pesron-validation-schema';
 import { useAppSelector } from '../store';
 import type { CreateUpdatePersonFields } from '../types/person.type';
-import { PersonModal } from './person-modal';
+import { PersonModal } from './perosn-modal/person-modal';
 
 interface CreatePersonProps {
   open: boolean;
   onCancel: () => void;
   onSubmit: (status: number) => void | Promise<void>;
-  isForSelf: boolean; // Если true - создаем person для себя
+  isForSelf: boolean;
 }
 
 export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: CreatePersonProps) => {
@@ -42,13 +42,14 @@ export const CreatePersonModal = ({ open, onCancel, onSubmit, isForSelf }: Creat
       await createPersonRequest({
         person: personData,
         isForSelf,
-        relation:
-          !isForSelf && relation && user?.personId
-            ? {
+        ...(!isForSelf && relation && user?.personId
+          ? {
+              relation: {
                 sourcePersonId: user.personId,
                 relationId: relation,
-              }
-            : {},
+              },
+            }
+          : {}),
       });
 
       reset();

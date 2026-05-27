@@ -1,0 +1,12 @@
+.updateRelationModal :global(.ant-modal-content) {
+  border-radius: 12px;
+}
+
+.updateRelationModal :global(.ant-modal-header) {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.updateRelationModal :global(.ant-modal-body) {
+  padding: 24px;
+}

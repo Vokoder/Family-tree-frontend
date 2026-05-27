@@ -32,8 +32,9 @@ import {
   SUBMIT,
   UPDATE_MY_PERSON,
   UPDATE_PERSON,
-} from '../constants/constants';
-import { useAppSelector } from '../store';
+} from '../../constants/constants';
+import { useAppSelector } from '../../store';
+import styles from './perosn-modal.module.css';
 
 const titles = [
   [CREATE_PERSON, CREATE_MY_PERSON],
@@ -67,6 +68,7 @@ export const PersonModal = <T extends FieldValues>({
 
   return (
     <Modal
+      className={styles.personModal}
       title={titles[Number(isForUpdate)][Number(isForSelf)]}
       open={open}
       onOk={onOk}

@@ -13,7 +13,7 @@ import { CreateRelationModal } from '../../components/create-relation-modal';
 import { DeletePersonButton } from '../../components/delete-person-button/delete-person-button';
 import { LoadingWrapper } from '../../components/loading-wrapper/loading-wrapper';
 import { UpdatePersonModal } from '../../components/update-person-modal';
-import { UpdateRelationModal } from '../../components/update-relation-modal';
+import { UpdateRelationModal } from '../../components/update-relation-modal/update-relation-modal';
 import {
   ACCOUNT_MANAGEMENT,
   CANCEL,
@@ -31,7 +31,6 @@ import {
   ERROR_GETTING_MY_PERSONS,
   ERROR_UPDATING_PERSON,
   ERROR_UPDATING_RELATION,
-  GO_TO_MY_PERSON,
   LOG_OUT,
   LOG_OUT_ALL,
   LOGIN,
@@ -46,8 +45,13 @@ import {
   UPDATE_RELATION,
 } from '../../constants/constants';
 import { PERSONS_PATH } from '../../constants/routes.constant';
-import { deleteProfileRequest, getCreatedPersonsRequest, logOutRequest } from '../../modules/fetch-api';
-import { hideAlert, logOut as logOutAction, showAlert, useAppDispatch, useAppSelector } from '../../store';
+import {
+  deleteProfileRequest,
+  getCreatedPersonsRequest,
+  getMyUserRequest,
+  logOutRequest,
+} from '../../modules/fetch-api';
+import { hideAlert, logIn, logOut as logOutAction, showAlert, useAppDispatch, useAppSelector } from '../../store';
 import type { Person } from '../../types/person.type';
 import styles from './profile.module.css';
 
@@ -104,6 +108,10 @@ export const Profile = () => {
       return;
     }
 
+    const user = await getMyUserRequest();
+    if (user) {
+      dispatch(logIn(user));
+    }
     await getCreatedPersons();
 
     dispatch(hideAlert());
@@ -217,8 +225,8 @@ export const Profile = () => {
         <Button icon={<HomeOutlined />} onClick={() => navigate(`/${PERSONS_PATH}`)} className={styles.backButton}>
           {TO_MAIN_PAGE}
         </Button>
-        <Card title={MY_PROFILE_TITLE} extra={<Tag color='blue'>{user?.roleId}</Tag>}>
-          <Descriptions column={1} bordered size='small'>
+        <Card title={MY_PROFILE_TITLE} extra={<Tag color='blue'>{user?.roleId}</Tag>} className={styles.profileCard}>
+          <Descriptions column={1} bordered size='small' className={styles.descriptionsBlock}>
             <Descriptions.Item label={LOGIN}>{user?.login}</Descriptions.Item>
             <Descriptions.Item label={DATE_OF_CREATION}>
               {user?.createdAt ? dayjs(user.createdAt).format('DD.MM.YYYY') : '—'}
@@ -231,45 +239,44 @@ export const Profile = () => {
                     className={styles.person_link}
                     style={{ color: myPerson.gender ? '#1677ff' : '#eb2f96' }}
                   >
-                    <Col>{`${myPerson.lastName} ${myPerson.firstName} ${myPerson.middleName || ''}`}</Col>
-                    <Col>
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setSelectedPerson(myPerson);
-                          handleOpenUpdatePerson();
-                        }}
-                      >
-                        {UPDATE_PERSON}
-                      </Button>
-                    </Col>
-
-                    <Col>
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setSelectedPerson(myPerson);
-                          handleOpenUpdateRelation();
-                        }}
-                      >
-                        {UPDATE_RELATION}
-                      </Button>
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setSelectedPerson(myPerson);
-                          handleOpenCreateRelation();
-                        }}
-                      >
-                        {CREATE_RELATION}
-                      </Button>
-                    </Col>
-
-                    <Col>
-                      <span onClick={(e) => e.preventDefault()}>
-                        <DeletePersonButton onConfirm={handleDeletePerson} id={myPerson.id} />
-                      </span>
-                    </Col>
+                    <Row gutter={[16, 0]} className={styles.personRow}>
+                      <Col>{`${myPerson.lastName} ${myPerson.firstName} ${myPerson.middleName || ''}`}</Col>
+                      <Col className={styles.actionsCol}>
+                        <Button
+                          className={styles.actionButton}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedPerson(myPerson);
+                            handleOpenUpdatePerson();
+                          }}
+                        >
+                          {UPDATE_PERSON}
+                        </Button>
+                        <Button
+                          className={styles.actionButton}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedPerson(myPerson);
+                            handleOpenUpdateRelation();
+                          }}
+                        >
+                          {UPDATE_RELATION}
+                        </Button>
+                        <Button
+                          className={styles.actionButton}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedPerson(myPerson);
+                            handleOpenCreateRelation();
+                          }}
+                        >
+                          {CREATE_RELATION}
+                        </Button>
+                        <span onClick={(e) => e.preventDefault()}>
+                          <DeletePersonButton onConfirm={handleDeletePerson} id={myPerson.id} />
+                        </span>
+                      </Col>
+                    </Row>
                   </Link>
                 ) : (
                   <Button type='link' onClick={handleOpenCreatePersonForSelf}>
@@ -280,22 +287,26 @@ export const Profile = () => {
             </Descriptions.Item>
           </Descriptions>
 
-          <Divider orientation='horizontal'>{CREATED_PERSONS}</Divider>
+          <Divider orientation='horizontal' className={styles.divider}>
+            {CREATED_PERSONS}
+          </Divider>
 
           <LoadingWrapper isLoading={isPersonsLoading}>
             <List
+              className={styles.personsList}
               dataSource={createdPersons.filter((p) => p.id !== user?.personId)}
               renderItem={(p: Person) => (
-                <List.Item>
+                <List.Item className={styles.personsListItem}>
                   <Link
                     to={`/${PERSONS_PATH}/${p.id}`}
                     className={styles.person_link}
                     style={{ color: p.gender ? '#1677ff' : '#eb2f96' }}
                   >
-                    <Row gutter={[16, 0]}>
+                    <Row gutter={[16, 0]} className={styles.personRow}>
                       <Col>{`${p.lastName} ${p.firstName} ${p.middleName || ''}`}</Col>
-                      <Col>
+                      <Col className={styles.actionsCol}>
                         <Button
+                          className={styles.actionButton}
                           onClick={(e) => {
                             e.preventDefault();
                             setSelectedPerson(p);
@@ -305,6 +316,7 @@ export const Profile = () => {
                           {UPDATE_PERSON}
                         </Button>
                         <Button
+                          className={styles.actionButton}
                           onClick={(e) => {
                             e.preventDefault();
                             setSelectedPerson(p);
@@ -314,6 +326,7 @@ export const Profile = () => {
                           {UPDATE_RELATION}
                         </Button>
                         <Button
+                          className={styles.actionButton}
                           onClick={(e) => {
                             e.preventDefault();
                             setSelectedPerson(p);
@@ -322,8 +335,6 @@ export const Profile = () => {
                         >
                           {CREATE_RELATION}
                         </Button>
-                      </Col>
-                      <Col>
                         <span onClick={(e) => e.preventDefault()}>
                           <DeletePersonButton onConfirm={handleDeletePerson} id={p.id} />
                         </span>
@@ -341,25 +352,26 @@ export const Profile = () => {
             </Button>
           </div>
 
-          <Divider orientation='horizontal'>{ACCOUNT_MANAGEMENT}</Divider>
+          <Divider orientation='horizontal' className={styles.divider}>
+            {ACCOUNT_MANAGEMENT}
+          </Divider>
 
-          <Space className={styles.space}>
-            <Button onClick={() => setIsPassModalOpen(true)}>{CHANGE_PASSWORD}</Button>
-            <Popconfirm
-              title={`${DELETE_ACCOUNT}?`}
-              description={EFFECT_IRREVERSIBLE}
-              onConfirm={handleDeleteProfile}
-              okText={SUBMIT}
-              cancelText={CANCEL}
-            >
-              <Button danger>{DELETE_ACCOUNT}</Button>
-            </Popconfirm>
-          </Space>
-
-          <Space className={styles.space}>
-            <Button onClick={handleLogOut}>{LOG_OUT}</Button>
-            <Button onClick={handleLogOutAll}>{LOG_OUT_ALL}</Button>
-          </Space>
+          <section className={styles.accountSection}>
+            <Space className={styles.space}>
+              <Button onClick={() => setIsPassModalOpen(true)}>{CHANGE_PASSWORD}</Button>
+              <Button onClick={handleLogOut}>{LOG_OUT}</Button>
+              <Button onClick={handleLogOutAll}>{LOG_OUT_ALL}</Button>
+              <Popconfirm
+                title={`${DELETE_ACCOUNT}?`}
+                description={EFFECT_IRREVERSIBLE}
+                onConfirm={handleDeleteProfile}
+                okText={SUBMIT}
+                cancelText={CANCEL}
+              >
+                <Button danger>{DELETE_ACCOUNT}</Button>
+              </Popconfirm>
+            </Space>
+          </section>
         </Card>
 
         <CreatePersonModal

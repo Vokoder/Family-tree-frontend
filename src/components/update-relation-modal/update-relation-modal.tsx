@@ -15,14 +15,15 @@ import {
   RELATION_UPDATED,
   RELATIONS,
   UPDATE_RELATION_TITLE,
-} from '../constants/constants';
-import { deleteRelationRequest, getRelatedPersonsRequest, updateRelationRequest } from '../modules/fetch-api';
-import type { RelationSchemaFields } from '../schemas/relation.schema';
-import { useAppSelector } from '../store';
-import type { Person } from '../types/person.type';
-import type { PersonWithRelation } from '../types/relation.type';
-import { compareRelations } from '../utils/compare-relations.utils';
-import { RelationForm } from './relation-form/relation-form';
+} from '../../constants/constants';
+import { deleteRelationRequest, getRelatedPersonsRequest, updateRelationRequest } from '../../modules/fetch-api';
+import type { RelationSchemaFields } from '../../schemas/relation.schema';
+import { useAppSelector } from '../../store';
+import type { Person } from '../../types/person.type';
+import type { PersonWithRelation } from '../../types/relation.type';
+import { compareRelations } from '../../utils/compare-relations.utils';
+import { RelationForm } from '../relation-form/relation-form';
+import styles from './update-relation-modal.module.css';
 
 interface UpdateRelationModalProps {
   sourcePerson: Person | null;
@@ -99,6 +100,7 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
 
   return (
     <Modal
+      className={styles.updateRelationModal}
       title={editingRelation ? UPDATE_RELATION_TITLE : `${RELATIONS}: ${sourcePerson.lastName}`}
       open={open}
       onCancel={editingRelation ? () => setEditingRelation(null) : onCancel}
@@ -107,7 +109,6 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
       destroyOnHidden
     >
       {editingRelation ? (
-        // РЕЖИМ ФОРМЫ
         <RelationForm
           sourcePerson={sourcePerson}
           relatedData={editingRelation}
@@ -116,7 +117,6 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
           isLoading={isEventLoading}
         />
       ) : (
-        // РЕЖИМ СПИСКА
         <List
           loading={isLoading}
           dataSource={relatedData}

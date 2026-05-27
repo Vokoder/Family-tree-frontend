@@ -62,17 +62,13 @@ export const PersonCard = ({ person, onPersonClick }: PersonCardProps) => {
           verticalAlign: 'top',
         }}
       >
-        {/* Рождение */}
         {person.dateOfBirthday && (
           <Descriptions.Item label={DATE_OF_BIRTHDAY}>{formatDate(person.dateOfBirthday)}</Descriptions.Item>
         )}
         {person.placeOfBirthday && (
-          <Descriptions.Item label={PLACE_OF_BIRTHDAY} style={{ padding: 0, margin: 0 }}>
-            {person.placeOfBirthday}
-          </Descriptions.Item>
+          <Descriptions.Item label={PLACE_OF_BIRTHDAY}>{person.placeOfBirthday}</Descriptions.Item>
         )}
 
-        {/* Смерть */}
         {person.dateOfDeath && (
           <Descriptions.Item label={<Typography.Text type='danger'>{DATE_OF_DEATH}</Typography.Text>}>
             {formatDate(person.dateOfDeath)}
@@ -80,7 +76,6 @@ export const PersonCard = ({ person, onPersonClick }: PersonCardProps) => {
         )}
         {person.placeOfDeath && <Descriptions.Item label={PLACE_OF_DEATH}>{person.placeOfDeath}</Descriptions.Item>}
 
-        {/* Локация */}
         {(person.country || person.city) && (
           <Descriptions.Item label={RELATED_LOCATIONS}>
             {[person.country, person.city].filter(Boolean).join(', ')}

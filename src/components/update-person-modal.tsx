@@ -15,7 +15,7 @@ import {
   type UpdatePersonDto,
 } from '../types/person.type';
 import type { Relation, RelationFilters } from '../types/relation.type';
-import { PersonModal } from './person-modal';
+import { PersonModal } from './perosn-modal/person-modal';
 
 interface UpdatePersonProps {
   open: boolean;

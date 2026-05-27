@@ -26,7 +26,7 @@ export const DeletePersonButton = ({ id, onConfirm = () => {} }: DeletePersonBut
       okButtonProps={{ danger: true }}
       icon={<QuestionCircleOutlined className={styles.icon} />}
     >
-      <Button>{DELETE_PERSON}</Button>
+      <Button className={styles.button}>{DELETE_PERSON}</Button>
     </Popconfirm>
   );
 };

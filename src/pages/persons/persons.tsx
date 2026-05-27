@@ -11,7 +11,6 @@ const { Title } = Typography;
 export const Persons = () => {
   return (
     <Layout className={styles.main_layout}>
-      {/* Шапка */}
       <Header className={styles.header}>
         <Title level={3} className={styles.title}>
           {WEBSITE_TITLE}

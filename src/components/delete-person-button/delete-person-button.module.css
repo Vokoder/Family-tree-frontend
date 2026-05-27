@@ -1,3 +1,20 @@
 .icon {
   color: red;
+  font-size: 16px;
+  margin-right: 4px;
+}
+
+.button:global(.ant-btn):not(:disabled) {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.button:global(.ant-btn):not(:disabled):hover {
+  color: #fff;
+  background: #ff4d4f;
+  border-color: #ff4d4f;
 }

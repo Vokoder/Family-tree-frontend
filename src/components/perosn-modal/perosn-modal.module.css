@@ -1,0 +1,44 @@
+.personModal :global(.ant-modal-content) {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.personModal :global(.ant-modal-header) {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 20px 24px 16px;
+}
+
+.personModal :global(.ant-modal-title) {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.personModal :global(.ant-modal-body) {
+  padding: 24px;
+}
+
+.personModal :global(.ant-modal-footer) {
+  padding: 12px 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.personModal :global(.ant-divider) {
+  margin: 20px 0 16px;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.personModal :global(.ant-form-item-label > label) {
+  font-weight: 500;
+  color: #595959;
+}
+
+.personModal :global(.ant-modal-footer .ant-btn) {
+  border-radius: 6px;
+  height: 36px;
+  padding: 0 20px;
+}
+
+.personModal :global(.ant-modal-footer .ant-btn-primary) {
+  box-shadow: 0 2px 4px rgba(22, 119, 255, 0.3);
+}

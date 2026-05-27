@@ -11,6 +11,7 @@ import {
   SERVER_PROFILE_ADRESS,
   SERVER_REFRASH_ADRESS,
   SERVER_RELATION_ADRESS,
+  SERVER_TREE_ADRESS,
   SERVER_TYPES_OF_RELATIONS_ADRESS,
   SERVER_USER_ADRESS,
 } from '../constants/env';
@@ -19,6 +20,7 @@ import { SIGN_IN_PATH } from '../constants/routes.constant';
 import type { LicenseData } from '../types/license.type';
 import type { CreatePersonDto, Person, PersonFilters, UpdatePersonDto } from '../types/person.type';
 import type { PersonWithRelation, Relation, RelationDto, RelationFilters } from '../types/relation.type';
+import type { TreeData } from '../types/tree.type';
 import type { TypeOfRelation } from '../types/types-of-relations.type';
 import type { User } from '../types/user.type';
 import { HttpError } from './http-error';
@@ -302,5 +304,14 @@ export const updatePersonRequest = async (personId: string, person: UpdatePerson
   } catch (error) {
     console.error(error);
     return 500;
+  }
+};
+
+export const getTreeRequest = async (personId: string): Promise<TreeData | null> => {
+  try {
+    return await axiosGetRequest<TreeData>(`${SERVER_ADRESS}${SERVER_TREE_ADRESS}${personId}`);
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };

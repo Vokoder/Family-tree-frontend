@@ -79,7 +79,6 @@ export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
 
   return (
     <Layout className={styles.content_layout}>
-      {/* Фильтры */}
       <Sider width={300} theme='light' className={styles.sider}>
         <Title level={5}>
           <FilterOutlined /> {FILTERS}
@@ -194,7 +193,6 @@ export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
         </Form>
       </Sider>
 
-      {/* Карточки */}
       <Content className={styles.content}>
         <Row gutter={[16, 16]} justify='center'>
           <Col xs={24}>
