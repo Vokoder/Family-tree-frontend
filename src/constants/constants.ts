@@ -15,10 +15,14 @@ export const DELETE = 'Удалить';
 export const EDIT = 'Изменить';
 export const RETRY = 'Повторить';
 export const DATA_NOT_FOUND = 'Ничего не найдено';
+export const RELATION_PERSON_IS = 'является';
+export const RELATION_PERSON_FOR = 'для';
+export const RELATION_PERSON_NOT_SPECIFIED = '--человек не указан--';
+export const RELATION_TYPE_EMPTY = '--связь не указана--';
 
 //  auth
 export const LOG_OUT = 'Выйти из аккуанта';
-export const LOG_OUT_ALL = 'Выйти из всех аккаунтов';
+export const LOG_OUT_ALL = 'Выйти со всех устройств';
 
 // gender
 export const MALE = 'Мужской';
@@ -112,3 +116,10 @@ export const ADDITIONALLY = 'Дополнительно';
 
 //  license
 export const LICENSE_AGREEMENT = 'Лицензионное сглашение';
+
+export const REL_TRANSLATIONS: Record<string, { direct: string; inverted: string }> = {
+  parent: { direct: 'Родитель', inverted: 'Ребенок' },
+  child: { direct: 'Ребенок', inverted: 'Родитель' },
+  spouse: { direct: 'Супруг(а)', inverted: 'Супруг(а)' },
+  sibling: { direct: 'Брат/Сестра', inverted: 'Брат/Сестра' },
+};

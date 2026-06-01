@@ -14,8 +14,8 @@ type DeletePersonButtonProps = {
 export const DeletePersonButton = ({ id, onConfirm = () => {} }: DeletePersonButtonProps) => {
   return (
     <Popconfirm
-      title='Удаление персонажа'
-      description='Вы уверены, что хотите удалить эту карточку? Это действие необратимо.'
+      title='Удаление анкеты'
+      description='Вы уверены, что хотите удалить эту анкету? Это действие необратимо.'
       onConfirm={async (e) => {
         e?.stopPropagation();
         onConfirm(await deletePersonRequest(id));

@@ -34,6 +34,7 @@ import {
   UPDATE_PERSON,
 } from '../../constants/constants';
 import { useAppSelector } from '../../store';
+import { getTranslation } from '../../utils/translate.utils';
 import styles from './perosn-modal.module.css';
 
 const titles = [
@@ -278,14 +279,13 @@ export const PersonModal = <T extends FieldValues>({
               name={'relation' as Path<T>}
               control={control}
               render={({ field }) => (
-                <Select
-                  {...field}
-                  allowClear
-                  placeholder={SELECT_RELATION_TYPE}
-                  options={typesOfRelations.map((typeOfRelation) => {
-                    return { value: typeOfRelation.id, label: typeOfRelation.id };
-                  })}
-                />
+                <Select {...field} allowClear placeholder={SELECT_RELATION_TYPE}>
+                  {typesOfRelations.map((type) => (
+                    <Select.Option key={type.id} value={type.id}>
+                      {getTranslation(type.id)}
+                    </Select.Option>
+                  ))}
+                </Select>
               )}
             />
           </Form.Item>

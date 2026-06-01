@@ -22,6 +22,7 @@ import { useAppSelector } from '../../store';
 import type { Person } from '../../types/person.type';
 import type { PersonWithRelation } from '../../types/relation.type';
 import { compareRelations } from '../../utils/compare-relations.utils';
+import { getTranslation } from '../../utils/translate.utils';
 import { RelationForm } from '../relation-form/relation-form';
 import styles from './update-relation-modal.module.css';
 
@@ -145,10 +146,12 @@ export const UpdateRelationModal = ({ sourcePerson, open, onCancel, onSubmit }: 
                   <Space>
                     <Typography.Text type='secondary'>{RELATION_TYPE}:</Typography.Text>
                     <Typography.Text strong>
-                      {item.relation.sourcePersonId === sourcePerson.id
-                        ? item.relation.relationId
-                        : (typesOfRelations.find((type) => type.id === item.relation.relationId)?.invertedPairId ??
-                          RELATION_ERROR)}
+                      {getTranslation(
+                        item.relation.sourcePersonId === sourcePerson.id
+                          ? item.relation.relationId
+                          : (typesOfRelations.find((type) => type.id === item.relation.relationId)?.invertedPairId ??
+                              RELATION_ERROR),
+                      )}
                     </Typography.Text>
                   </Space>
                 }
