@@ -15,7 +15,7 @@ import {
   type UpdatePersonDto,
 } from '../types/person.type';
 import type { Relation, RelationFilters } from '../types/relation.type';
-import { PersonModal } from './perosn-modal/person-modal';
+import { PersonModal } from './peroson-modal/person-modal';
 
 interface UpdatePersonProps {
   open: boolean;
@@ -138,7 +138,7 @@ export const UpdatePersonModal = ({ open, onCancel, onSubmit, person }: UpdatePe
       handleClose={onCancel}
       open={open}
       confirmLoading={isSubmitting}
-      isForSelf={true}
+      isForSelf={!!(person && user?.personId && person.id === user.personId)}
       isForUpdate={true}
     />
   );

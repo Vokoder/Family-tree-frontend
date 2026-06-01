@@ -35,7 +35,7 @@ import {
 } from '../../constants/constants';
 import { useAppSelector } from '../../store';
 import { getTranslation } from '../../utils/translate.utils';
-import styles from './perosn-modal.module.css';
+import styles from './person-modal.module.css';
 
 const titles = [
   [CREATE_PERSON, CREATE_MY_PERSON],

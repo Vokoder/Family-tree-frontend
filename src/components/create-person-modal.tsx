@@ -7,7 +7,7 @@ import { createPersonRequest } from '../modules/fetch-api';
 import { personSchema } from '../schemas/pesron-validation-schema';
 import { useAppSelector } from '../store';
 import type { CreateUpdatePersonFields } from '../types/person.type';
-import { PersonModal } from './perosn-modal/person-modal';
+import { PersonModal } from './peroson-modal/person-modal';
 
 interface CreatePersonProps {
   open: boolean;
