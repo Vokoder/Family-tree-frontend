@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { Button, Col, DatePicker, Form, Input, Layout, Row, Select, Space, Typography } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Layout, Pagination, Row, Select, Space, Typography } from 'antd';
 
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -50,13 +50,23 @@ interface SearchPersonsParams {
 
 export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
   const [searchResults, setSearchResults] = useState<Person[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getSearchedPersons = async (filter?: PersonFilters): Promise<void> => {
+  const { control, handleSubmit, reset, getValues } = useForm({
+    resolver: zodResolver(personFilterSchema),
+  });
+
+  const getSearchedPersons = async (page = 1, size = 10, filter?: PersonFilters): Promise<void> => {
     try {
       setIsLoading(true);
-      const persons = await getPersonsRequest(filter);
-      setSearchResults(persons);
+      const clearedFilter = filter ? removeEmptyOrUndefined(filter) : {};
+      const response = await getPersonsRequest(page, size, clearedFilter);
+
+      setSearchResults(response.data);
+      setTotalCount(response.total);
     } catch (error) {
       console.error(error);
     } finally {
@@ -64,17 +74,20 @@ export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
     }
   };
 
-  const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(personFilterSchema),
-  });
-
   useEffect(() => {
-    getSearchedPersons();
+    getSearchedPersons(currentPage, pageSize);
   }, []);
 
   const onSearch = (filter: PersonFilters) => {
-    const clearedFilter = removeEmptyOrUndefined(filter);
-    getSearchedPersons(clearedFilter);
+    setCurrentPage(1);
+    getSearchedPersons(1, pageSize, filter);
+  };
+
+  const handlePageChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+    const currentFormValues = getValues() as PersonFilters;
+    getSearchedPersons(page, size, currentFormValues);
   };
 
   return (
@@ -203,6 +216,20 @@ export const SearchPersons = ({ onPersonClick }: SearchPersonsParams) => {
             </LoadingWrapper>
           </Col>
         </Row>
+
+        {totalCount > 0 && (
+          <Row justify='center' style={{ marginTop: '24px', paddingBottom: '24px' }}>
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalCount}
+              onChange={handlePageChange}
+              showSizeChanger
+              pageSizeOptions={['5', '10', '20', '50']}
+              locale={{ items_per_page: '/ стр.' }}
+            />
+          </Row>
+        )}
       </Content>
     </Layout>
   );

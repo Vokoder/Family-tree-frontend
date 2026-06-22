@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Card, Descriptions, Empty, Space, Tag, Typography } from 'antd';
 
@@ -22,7 +22,7 @@ import {
   RELATED_LOCATIONS,
 } from '../../constants/constants';
 import { USER_ADMIN_ROLE } from '../../constants/env';
-import { TREE_PATH } from '../../constants/routes.constant';
+import { PERSONS_PATH, TREE_PATH } from '../../constants/routes.constant';
 import { getPersonRequest } from '../../modules/fetch-api';
 import { useAppSelector } from '../../store';
 import type { Person as PersonType } from '../../types/person.type';
@@ -45,10 +45,19 @@ export const Person = () => {
   if ((!person && !loading) || !personId) {
     return (
       <div style={{ padding: '24px' }}>
-        <Button onClick={() => navigate(-1)} icon={<ArrowLeftOutlined />}>
+        <Button
+          onClick={() => {
+            if (history.length > 1) {
+              navigate(-1);
+            } else {
+              navigate(PERSONS_PATH, { replace: true });
+            }
+          }}
+          icon={<ArrowLeftOutlined />}
+        >
           {BACK}
         </Button>
-        <Empty description='Персона не найдена' style={{ marginTop: 50 }} />
+        <Empty description='Персона не найдена' className='empty' />
       </div>
     );
   }
@@ -64,7 +73,17 @@ export const Person = () => {
 
   return (
     <div className={styles.screen}>
-      <Button icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)} className={styles.backButton}>
+      <Button
+        icon={<ArrowLeftOutlined />}
+        onClick={() => {
+          if (history.length > 1) {
+            navigate(-1);
+          } else {
+            navigate(PERSONS_PATH, { replace: true });
+          }
+        }}
+        className={styles.backButton}
+      >
         {BACK}
       </Button>
 

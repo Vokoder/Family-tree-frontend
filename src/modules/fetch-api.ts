@@ -150,22 +150,31 @@ export const getPersonRequest = async (uid: string): Promise<Person | null> => {
   }
 };
 
-export const getPersonsRequest = async (filter?: PersonFilters): Promise<Person[]> => {
+export const getPersonsRequest = async (
+  page: number,
+  pageSize: number,
+  filter?: PersonFilters,
+): Promise<{ data: Person[]; total: number }> => {
   try {
     const normalizedFilter = filter
       ? {
           ...filter,
+          page,
+          pageSize,
           dateOfBirthday: filter.dateOfBirthday?.toISOString(),
           dateOfDeath: filter.dateOfDeath?.toISOString(),
         }
       : undefined;
 
-    const persons = await axiosGetRequest<Person[]>(`${SERVER_ADRESS}${SERVER_PERSON_ADRESS}`, normalizedFilter);
+    const persons = await axiosGetRequest<{ data: Person[]; total: number }>(
+      `${SERVER_ADRESS}${SERVER_PERSON_ADRESS}`,
+      normalizedFilter,
+    );
     return persons;
   } catch (error) {
     console.error(error);
   }
-  return [];
+  return { data: [], total: 0 };
 };
 
 export const getCreatedPersonsRequest = async (uid: string): Promise<Person[]> => {
